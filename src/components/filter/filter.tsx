@@ -34,7 +34,6 @@ export default function Filter() {
                 <input
                   type="checkbox"
                   name="photocamera"
-                  checked
                 /><span className="custom-checkbox__icon"></span>
                 <span className="custom-checkbox__label">Фотокамера</span>
               </label>
@@ -57,7 +56,6 @@ export default function Filter() {
                 <input
                   type="checkbox"
                   name="digital"
-                  checked
                 />
                 <span className="custom-checkbox__icon">
                 </span>
@@ -67,7 +65,7 @@ export default function Filter() {
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" name="film" disabled />
+                <input type="checkbox" name="film"/>
                 <span
                   className="custom-checkbox__icon"
                 >
@@ -92,8 +90,6 @@ export default function Filter() {
                 <input
                   type="checkbox"
                   name="collection"
-                  checked
-                  disabled
                 />
                 <span className="custom-checkbox__icon">
                 </span>
@@ -106,7 +102,7 @@ export default function Filter() {
             <legend className="title title--h5">Уровень</legend>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input type="checkbox" name="zero" checked />
+                <input type="checkbox" name="zero"/>
                 <span
                   className="custom-checkbox__icon"
                 >
