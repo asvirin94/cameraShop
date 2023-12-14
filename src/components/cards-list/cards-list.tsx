@@ -9,9 +9,9 @@ export default function CardsList() {
     <div className="cards catalog__cards">
       {products.map((product) => (
         <ProductCard
+          key={product.id}
           name={product.name}
           price={product.price}
-          key={product.id}
           previewImg={product.previewImg}
           previewImg2x={product.previewImg2x}
           rating={product.rating}

@@ -16,7 +16,7 @@ export default function ProductCard({name, price, previewImg, previewImg2x, rati
       const starType = rating >= i ? '#icon-full-star' : '#icon-star';
 
       result.push(
-        <svg width="17" height="16" aria-hidden="true">
+        <svg width="17" height="16" aria-hidden="true" key={i}>
           <use xlinkHref={starType}></use>
         </svg>
       );
