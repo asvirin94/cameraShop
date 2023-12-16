@@ -13,7 +13,6 @@ export default function Banner() {
       <Swiper
         effect={'creative'}
         autoplay={{ delay: 3000, disableOnInteraction: false, pauseOnMouseEnter: true}}
-        style={{height: '280px'}}
         loop
         creativeEffect={{
           prev: {
@@ -27,7 +26,14 @@ export default function Banner() {
         }}
         modules={[EffectCreative, Autoplay, Pagination]}
         pagination={{ clickable: true}}
-        className="mySwiper"
+        style={{
+          height: '280px',
+          '--swiper-pagination-color': '#7575E2',
+          '--swiper-pagination-bullet-inactive-color': '#F4F4FC',
+          '--swiper-pagination-bullet-size': '14px',
+          '--swiper-pagination-bottom': '22px',
+          '--swiper-pagination-left': '800px'
+        } as React.CSSProperties}
       >
         <SwiperSlide>
           <div className="swiper-slide">

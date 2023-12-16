@@ -1,3 +1,5 @@
+import { STARS_COUNT } from '../../consts';
+
 type ProductCardProps = {
   name: string;
   price: number;
@@ -12,7 +14,7 @@ export default function ProductCard({name, price, previewImg, previewImg2x, rati
   const getRatingStars = () => {
     const result = [];
 
-    for(let i = 1; i <= 5; i++) {
+    for(let i = 1; i <= STARS_COUNT; i++) {
       const starType = rating >= i ? '#icon-full-star' : '#icon-star';
 
       result.push(

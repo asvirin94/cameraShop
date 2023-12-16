@@ -5,8 +5,8 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/'>
-          <Route index element={<StartPage />}></Route>
+        <Route path='/' element={<StartPage />}>
+          <Route path='?page=:page' element={<StartPage />}></Route>
         </Route>
       </Routes>
     </BrowserRouter>
