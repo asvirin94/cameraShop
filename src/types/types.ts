@@ -8,10 +8,10 @@ export type ProductType = {
   id: number;
   name: string;
   vendorCode: string;
-  type: 'Коллекционная' | 'Моментальная'|'Цифровая'|'Плёночная';
-  category: 'Видеокамера'|'Фотоаппарат';
+  type: 'Коллекционная' | 'Моментальная' | 'Цифровая' | 'Плёночная';
+  category: 'Видеокамера' | 'Фотоаппарат';
   description: string;
-  level: 'Нулевой'| 'Любительский'|'Профессиональный';
+  level: 'Нулевой' | 'Любительский' | 'Профессиональный';
   price: number;
   rating: number;
   reviewCount: number;
@@ -19,4 +19,13 @@ export type ProductType = {
   previewImg2x: string;
   previewImgWebp: string;
   previewImgWebp2x: string;
-  };
+};
+
+export type Promos = {
+  id: number;
+  name: string;
+  previewImg: string;
+  previewImg2x: string;
+  previewImgWebp: string;
+  previewImgWebp2x: string;
+}[];
