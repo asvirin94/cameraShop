@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { STARS_COUNT } from '../../consts';
 import { useAppDispatch } from '../../hooks';
 import { setproductToAdd, setModalIsOpen, setisModalAddToBusketOpen } from '../../store/app-process/app-process.slice';
@@ -71,7 +72,7 @@ export default function ProductCard(props: Props) {
         >
                             Купить
         </button>
-        <a className="btn btn--transparent" href="#">Подробнее </a>
+        <Link className="btn btn--transparent" to={`/product/${product.id}/description`}>Подробнее </Link>
       </div>
     </div>
   );

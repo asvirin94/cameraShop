@@ -14,7 +14,7 @@ export default function ModalAddToBusket() {
           <picture>
             <source
               type="image/webp"
-              srcSet={`${product?.previewImgWebp as string}, ${product?.previewImgWebp2x as string}`}
+              srcSet={`/${product?.previewImgWebp as string}, /${product?.previewImgWebp2x as string}`}
             />
             <img
               src={product?.previewImg}
