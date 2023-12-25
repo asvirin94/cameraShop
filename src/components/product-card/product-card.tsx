@@ -70,9 +70,9 @@ export default function ProductCard(props: Props) {
             dispatch(setproductToAdd(product));
           }}
         >
-                            Купить
+          Купить
         </button>
-        <Link className="btn btn--transparent" to={`/product/${product.id}/description`}>Подробнее </Link>
+        <Link className="btn btn--transparent" to={`/product/${product.id}/description`} onClick={() => window.scrollTo({top: 0})}>Подробнее </Link>
       </div>
     </div>
   );

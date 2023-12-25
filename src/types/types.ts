@@ -29,3 +29,5 @@ export type Promos = {
   previewImgWebp: string;
   previewImgWebp2x: string;
 }[];
+
+export type Id = number;

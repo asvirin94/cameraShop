@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ProductType, Promos } from '../types/types';
+import { Id, ProductType, Promos } from '../types/types';
 import { AxiosInstance } from 'axios';
 import { toast } from 'react-toastify';
 
@@ -20,13 +20,24 @@ export const loadProductsAction = createAsyncThunk<
 
 });
 
-export const getPromosAction = createAsyncThunk<
+export const loadPromosAction = createAsyncThunk<
 Promos,
 undefined,
 {
   extra: AxiosInstance;
 }
->('getPromos', async(_arg, {extra: api}) => {
+>('loadPromos', async(_arg, {extra: api}) => {
   const {data} = await api.get<Promos>('promo');
+  return data;
+});
+
+export const loadSimilarProductsAction = createAsyncThunk<
+  ProductType[],
+  Id,
+  {
+    extra: AxiosInstance;
+  }
+>('loadSimilarproducts', async(id, {extra: api}) => {
+  const {data} = await api.get<ProductType[]>(`cameras/${id}/similar`);
   return data;
 });
