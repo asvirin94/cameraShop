@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { Id, ProductType, Promos } from '../types/types';
+import { Id, ProductType, Promos, Review } from '../types/types';
 import { AxiosInstance } from 'axios';
 import { toast } from 'react-toastify';
 
@@ -41,3 +41,13 @@ export const loadSimilarProductsAction = createAsyncThunk<
   const {data} = await api.get<ProductType[]>(`cameras/${id}/similar`);
   return data;
 });
+
+export const loadReviewsAction = createAsyncThunk<
+  Review[],
+  Id,
+  {
+    extra: AxiosInstance;
+  }>('loadReviews', async(id, {extra: api}) => {
+    const {data} = await api.get<Review[]>(`cameras/${id}/reviews`);
+    return data;
+  });

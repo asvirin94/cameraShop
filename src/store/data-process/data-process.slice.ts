@@ -1,12 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { ProductType, Promos } from '../../types/types';
+import { ProductType, Promos, Review } from '../../types/types';
 import { NameSpace } from '../../consts';
-import { loadProductsAction, loadPromosAction, loadSimilarProductsAction } from '../api-actions';
+import { loadProductsAction, loadPromosAction, loadReviewsAction, loadSimilarProductsAction } from '../api-actions';
 
 type InitialStateType = {
   products: ProductType[];
   promos: Promos;
   similarProducts: ProductType[];
+  reviews: Review[];
   isProductsLoaded: boolean;
 }
 
@@ -14,6 +15,7 @@ const initialState: InitialStateType = {
   products: [],
   promos: [],
   similarProducts: [],
+  reviews: [],
   isProductsLoaded: false
 };
 
@@ -35,6 +37,9 @@ export const dataSlice = createSlice({
       })
       .addCase(loadSimilarProductsAction.fulfilled, (state, action) => {
         state.similarProducts = action.payload;
+      })
+      .addCase(loadReviewsAction.fulfilled, (state, action) => {
+        state.reviews = action.payload;
       });
   },
 });
