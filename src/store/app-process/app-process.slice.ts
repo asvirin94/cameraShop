@@ -4,16 +4,20 @@ import { ProductType } from '../../types/types';
 
 type InitialStateType = {
   currentPage: number;
+  productOnPage: ProductType | undefined;
   productToAdd: ProductType | undefined;
   isModalOpen: boolean;
   isModalAddToBusketOpen: boolean;
+  isModalAddReviewOpen: boolean;
 };
 
 const initialState: InitialStateType = {
   currentPage: 0,
+  productOnPage: undefined,
   productToAdd: undefined,
   isModalOpen: false,
-  isModalAddToBusketOpen: false
+  isModalAddToBusketOpen: false,
+  isModalAddReviewOpen: false,
 };
 
 export const appSlice = createSlice({
@@ -29,14 +33,35 @@ export const appSlice = createSlice({
     setisModalAddToBusketOpen: (state, action: PayloadAction<boolean>) => {
       state.isModalAddToBusketOpen = action.payload;
     },
+    setIsModalAddReviewOpen: (state, action: PayloadAction<boolean>) => {
+      state.isModalAddReviewOpen = action.payload;
+    },
     closeAllModal: (state) => {
       state.isModalAddToBusketOpen = false;
       state.isModalOpen = false;
+      state.isModalAddReviewOpen = false;
     },
-    setproductToAdd: (state, action: PayloadAction<ProductType | undefined>) => {
+    setproductToAdd: (
+      state,
+      action: PayloadAction<ProductType | undefined>
+    ) => {
       state.productToAdd = action.payload;
-    }
-  }
+    },
+    setProductOnPage: (
+      state,
+      action: PayloadAction<ProductType | undefined>
+    ) => {
+      state.productOnPage = action.payload;
+    },
+  },
 });
 
-export const {setCurrentPage, setModalIsOpen, setisModalAddToBusketOpen, closeAllModal, setproductToAdd} = appSlice.actions;
+export const {
+  setCurrentPage,
+  setModalIsOpen,
+  setisModalAddToBusketOpen,
+  closeAllModal,
+  setproductToAdd,
+  setIsModalAddReviewOpen,
+  setProductOnPage,
+} = appSlice.actions;

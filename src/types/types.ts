@@ -42,3 +42,12 @@ export type Review = {
   review: string;
   rating: number;
 }
+
+export type NewReview = {
+  cameraId: number | undefined;
+  userName: string;
+  advantage: string;
+  disadvantage: string;
+  review: string;
+  rating: number | undefined;
+}

@@ -5,14 +5,13 @@ import { loadReviewsAction } from '../../store/api-actions';
 import * as dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 import { VISIBLE_REVIEWS_PER_CLICK } from '../../consts';
+import { setIsModalAddReviewOpen, setModalIsOpen } from '../../store/app-process/app-process.slice';
+import { getproductOnPage } from '../../store/app-process/app-process.selectors';
 
-type Props = {
-  id: number;
-};
-
-export default function Reviews({ id }: Props) {
+export default function Reviews() {
   const dispatch = useAppDispatch();
   const reviews = useAppSelector(getReviews);
+  const id = useAppSelector(getproductOnPage)?.id;
 
   const [currentReviewSector, setCurrentReviewSector] = useState(0);
 
@@ -21,14 +20,14 @@ export default function Reviews({ id }: Props) {
   useEffect(() => {
     let isMount = true;
 
-    if (isMount) {
+    if (isMount && id) {
       dispatch(loadReviewsAction(id));
     }
 
     return () => {
       isMount = false;
     };
-  }, []);
+  }, [id]);
 
   if (reviews) {
     const sortedReviews = [...reviews].sort((a, b) => {
@@ -45,7 +44,11 @@ export default function Reviews({ id }: Props) {
           <div className="container">
             <div className="page-content__headed">
               <h2 className="title title--h3">Отзывы</h2>
-              <button className="btn" type="button">
+              <button className="btn" type="button" onClick={() => {
+                dispatch(setModalIsOpen(true));
+                dispatch(setIsModalAddReviewOpen(true));
+              }}
+              >
                 Оставить свой отзыв
               </button>
             </div>

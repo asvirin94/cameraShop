@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { ProductType } from '../../types/types';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { loadSimilarProductsAction } from '../../store/api-actions';
 import { getSimilarProducts } from '../../store/data-process/data-process.selectors';
@@ -9,13 +8,12 @@ import 'swiper/css';
 import { Navigation } from 'swiper/modules';
 import SwiperCore from 'swiper';
 import { SIMILAR_PRODUCTS_ON_PAGE_COUNT } from '../../consts';
+import { getproductOnPage } from '../../store/app-process/app-process.selectors';
 
-type Props = {
-  product: ProductType;
-};
 
-export default function Slider({ product }: Props) {
+export default function Slider() {
   const dispatch = useAppDispatch();
+  const product = useAppSelector(getproductOnPage);
   const similarProducts = useAppSelector(getSimilarProducts);
   const swiperRef = useRef<SwiperCore>();
   const [currentSimilarIndex, setCurrentSimilarIndex] = useState(0);
@@ -28,7 +26,7 @@ export default function Slider({ product }: Props) {
   useEffect(() => {
     let isMounted = true;
 
-    if (isMounted) {
+    if (isMounted && product) {
       dispatch(loadSimilarProductsAction(product.id));
     }
 

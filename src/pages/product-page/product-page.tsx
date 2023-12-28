@@ -3,7 +3,9 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getProducts } from '../../store/data-process/data-process.selectors';
 import { STARS_COUNT } from '../../consts';
 import {
+  closeAllModal,
   setModalIsOpen,
+  setProductOnPage,
   setisModalAddToBusketOpen,
   setproductToAdd,
 } from '../../store/app-process/app-process.slice';
@@ -13,6 +15,7 @@ import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import Slider from '../../components/slider/slider';
 import Reviews from '../../components/reviews/reviews';
+import { useEffect } from 'react';
 
 export default function ProductPage() {
   const { id, tab } = useParams();
@@ -22,10 +25,28 @@ export default function ProductPage() {
 
   const product = products.find((item) => item.id === +(id as string));
 
+  useEffect(() => {
+    let isMount = true;
+
+    if(isMount) {
+      dispatch(setProductOnPage(product));
+      document.addEventListener('keydown', (evt) => {
+        if(evt.key === 'Escape') {
+          dispatch(closeAllModal());
+        }
+      });
+    }
+
+    return () => {
+      isMount = false;
+    };
+  }, [product]);
+
   const propertyTabClassname =
     tab === 'properties' ? 'tabs__element is-active' : 'tabs__element';
   const descriptionTabClassname =
     tab === 'description' ? 'tabs__element is-active' : 'tabs__element';
+
 
   if (product) {
     const getRatingStars = () => {
@@ -203,14 +224,13 @@ export default function ProductPage() {
                   </div>
                 </section>
               </div>
-              <Slider product={product} />
-              <Reviews id={product.id} />
+              <Slider />
+              <Reviews />
             </div>
-            <Modal />
+            <Modal/>
           </main>
           <a
             className="up-btn"
-            href="#header"
             onClick={() =>
               scrollTo({
                 top: 0,
