@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
-import { STARS_COUNT } from '../../consts';
 import { useAppDispatch } from '../../hooks';
 import { setproductToAdd, setModalIsOpen, setisModalAddToBusketOpen } from '../../store/app-process/app-process.slice';
 import { ProductType } from '../../types/types';
+import RatingStars from '../rating-stars/rating-stars';
 
 type Props = {
   product: ProductType;
@@ -11,22 +11,6 @@ type Props = {
 export default function ProductCard(props: Props) {
   const dispatch = useAppDispatch();
   const {product} = props;
-
-  const getRatingStars = () => {
-    const result = [];
-
-    for(let i = 1; i <= STARS_COUNT; i++) {
-      const starType = product.rating >= i ? '#icon-full-star' : '#icon-star';
-
-      result.push(
-        <svg width="17" height="16" aria-hidden="true" key={i}>
-          <use xlinkHref={starType}></use>
-        </svg>
-      );
-    }
-
-    return result;
-  };
 
   return (
     <div className="product-card">
@@ -47,7 +31,7 @@ export default function ProductCard(props: Props) {
       </div>
       <div className="product-card__info">
         <div className="rate product-card__rate">
-          {getRatingStars()}
+          <RatingStars rating={product.rating}/>
           <p className="visually-hidden">Рейтинг: {product.rating}</p>
           <p className="rate__count">
             <span className="visually-hidden">Всего оценок:</span>{product.reviewCount}

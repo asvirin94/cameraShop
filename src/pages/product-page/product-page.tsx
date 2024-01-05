@@ -1,7 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getProducts } from '../../store/data-process/data-process.selectors';
-import { STARS_COUNT } from '../../consts';
 import {
   closeAllModal,
   setModalIsOpen,
@@ -16,6 +15,7 @@ import Footer from '../../components/footer/footer';
 import Slider from '../../components/slider/slider';
 import Reviews from '../../components/reviews/reviews';
 import { useEffect } from 'react';
+import RatingStars from '../../components/rating-stars/rating-stars';
 
 export default function ProductPage() {
   const { id, tab } = useParams();
@@ -49,21 +49,6 @@ export default function ProductPage() {
 
 
   if (product) {
-    const getRatingStars = () => {
-      const result = [];
-
-      for (let i = 1; i <= STARS_COUNT; i++) {
-        const starType = product.rating >= i ? '#icon-full-star' : '#icon-star';
-
-        result.push(
-          <svg width="17" height="16" aria-hidden="true" key={i}>
-            <use xlinkHref={starType}></use>
-          </svg>
-        );
-      }
-
-      return result;
-    };
 
     return (
       <>
@@ -120,7 +105,7 @@ export default function ProductPage() {
                     <div className="product__content">
                       <h1 className="title title--h3">{product.name}</h1>
                       <div className="rate product__rate">
-                        {getRatingStars()}
+                        <RatingStars rating={product.rating}/>
                         <p className="visually-hidden">
                           Рейтинг: {product.rating}
                         </p>

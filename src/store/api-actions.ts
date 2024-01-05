@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { Id, ProductType, Promos, Review } from '../types/types';
+import { Id, NewReview, ProductType, Promos, Review } from '../types/types';
 import { AxiosInstance } from 'axios';
 import { toast } from 'react-toastify';
 
@@ -51,3 +51,13 @@ export const loadReviewsAction = createAsyncThunk<
     const {data} = await api.get<Review[]>(`cameras/${id}/reviews`);
     return data;
   });
+
+export const sendNewReviewAction = createAsyncThunk<
+  void,
+  NewReview,
+  {
+    extra: AxiosInstance;
+  }
+>('sendNewReview', async (review: NewReview, {extra: api}) => {
+  await api.post('reviews', review);
+});

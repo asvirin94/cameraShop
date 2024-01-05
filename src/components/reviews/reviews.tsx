@@ -7,6 +7,7 @@ import 'dayjs/locale/ru';
 import { VISIBLE_REVIEWS_PER_CLICK } from '../../consts';
 import { setIsModalAddReviewOpen, setModalIsOpen } from '../../store/app-process/app-process.slice';
 import { getproductOnPage } from '../../store/app-process/app-process.selectors';
+import RatingStars from '../rating-stars/rating-stars';
 
 export default function Reviews() {
   const dispatch = useAppDispatch();
@@ -74,21 +75,7 @@ export default function Reviews() {
                       </time>
                     </div>
                     <div className="rate review-card__rate">
-                      <svg width="17" height="16" aria-hidden="true">
-                        <use xlinkHref="#icon-full-star"></use>
-                      </svg>
-                      <svg width="17" height="16" aria-hidden="true">
-                        <use xlinkHref="#icon-full-star"></use>
-                      </svg>
-                      <svg width="17" height="16" aria-hidden="true">
-                        <use xlinkHref="#icon-full-star"></use>
-                      </svg>
-                      <svg width="17" height="16" aria-hidden="true">
-                        <use xlinkHref="#icon-full-star"></use>
-                      </svg>
-                      <svg width="17" height="16" aria-hidden="true">
-                        <use xlinkHref="#icon-full-star"></use>
-                      </svg>
+                      <RatingStars rating={review.rating}/>
                       <p className="visually-hidden">Оценка: {review.rating}</p>
                     </div>
                     <ul className="review-card__list">

@@ -1,43 +1,103 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { closeAllModal } from '../../store/app-process/app-process.slice';
+import {
+  getIsModalAddReviewOpen,
+  getproductOnPage,
+} from '../../store/app-process/app-process.selectors';
+import { useForm } from 'react-hook-form';
+import { loadReviewsAction, sendNewReviewAction } from '../../store/api-actions';
 import { NewReview } from '../../types/types';
-import { getIsModalAddReviewOpen, getproductOnPage } from '../../store/app-process/app-process.selectors';
 
 export default function ModalAddReview() {
   const dispatch = useAppDispatch();
   const productId = useAppSelector(getproductOnPage)?.id;
   const isModalOpen = useAppSelector(getIsModalAddReviewOpen);
   const firstInputRef = useRef<HTMLInputElement | null>(null);
+  const {
+    register,
+    getValues,
+    formState: { errors },
+    handleSubmit,
+    trigger,
+    setValue
+  } = useForm();
 
   useEffect(() => {
-    if(isModalOpen) {
+    if (isModalOpen) {
       setTimeout(() => {
-        if(firstInputRef.current) {
+        if (firstInputRef.current) {
           firstInputRef.current.focus();
         }
       }, 10);
     }
   }, [isModalOpen]);
 
-  const [review, setReview] = useState<NewReview>({
-    cameraId: productId,
-    userName: '',
-    advantage: '',
-    disadvantage: '',
-    review: '',
-    rating: undefined
-  });
+  const checkName = () => {
+    const { userName } = getValues();
+    if (typeof userName === 'string') {
+      const isValid = userName.length > 1 && userName.length < 16;
+      return isValid || 'Имя должно содержать от 2 до 15 символов';
+    }
+  };
+
+  const checkAdvantages = () => {
+    const { advantages } = getValues();
+    if (typeof advantages === 'string') {
+      const isValid = advantages.length > 9 && advantages.length < 161;
+      return isValid || 'От 10 до 160 символов';
+    }
+  };
+
+  const checkDisadvantages = () => {
+    const { disadvantages } = getValues();
+    if (typeof disadvantages === 'string') {
+      const isValid = disadvantages.length > 9 && disadvantages.length < 161;
+      return isValid || 'От 10 до 160 символов';
+    }
+  };
+
+  const checkReview = () => {
+    const { review } = getValues();
+    if (typeof review === 'string') {
+      const isValid = review.length > 9 && review.length < 161;
+      return isValid || 'От 10 до 160 символов';
+    }
+  };
+
+  const onSubmit = () => {
+    const {userName, advantages, disadvantages, review, rate} = getValues();
+    const newReview: NewReview = {
+      cameraId: productId,
+      userName: userName as string,
+      advantage: advantages as string,
+      disadvantage: disadvantages as string,
+      review: review as string,
+      rating: +rate
+    };
+
+    dispatch(sendNewReviewAction(newReview))
+      .then(() => {
+        dispatch(closeAllModal());
+        dispatch(loadReviewsAction(productId as number));
+      });
+  };
 
   return (
     <>
       <p className="title title--h4">Оставить отзыв</p>
       <div className="form-review">
-        <form method="post">
+        <form
+          method="post"
+          onSubmit={(evt) => {
+            evt.preventDefault();
+            void handleSubmit(onSubmit)(evt);
+          }}
+        >
           <div className="form-review__rate">
             <fieldset className="rate form-review__item">
               <legend className="rate__caption">
-                        Рейтинг
+                Рейтинг
                 <svg width="9" height="9" aria-hidden="true">
                   <use xlinkHref="#icon-snowflake"></use>
                 </svg>
@@ -45,12 +105,17 @@ export default function ModalAddReview() {
               <div className="rate__bar">
                 <div className="rate__group">
                   <input
+                    {...register('rate', {
+                      required: 'Укажите оценку'
+                    })}
                     className="visually-hidden"
                     id="star-5"
-                    name="rate"
                     type="radio"
                     value="5"
-                    onChange={(evt) => setReview((prevState) => ({...prevState, rating: +(evt.target.value)}))}
+                    onChange={(evt) => {
+                      setValue('rate', evt.target.value);
+                      trigger('rate');
+                    }}
                   />
                   <label
                     className="rate__label"
@@ -59,12 +124,17 @@ export default function ModalAddReview() {
                   >
                   </label>
                   <input
+                    {...register('rate', {
+                      required: 'Укажите оценку'
+                    })}
                     className="visually-hidden"
                     id="star-4"
-                    name="rate"
                     type="radio"
                     value="4"
-                    onChange={(evt) => setReview((prevState) => ({...prevState, rating: +(evt.target.value)}))}
+                    onChange={(evt) => {
+                      setValue('rate', evt.target.value);
+                      trigger('rate');
+                    }}
                   />
                   <label
                     className="rate__label"
@@ -73,12 +143,17 @@ export default function ModalAddReview() {
                   >
                   </label>
                   <input
+                    {...register('rate', {
+                      required: 'Укажите оценку'
+                    })}
                     className="visually-hidden"
                     id="star-3"
-                    name="rate"
                     type="radio"
                     value="3"
-                    onChange={(evt) => setReview((prevState) => ({...prevState, rating: +(evt.target.value)}))}
+                    onChange={(evt) => {
+                      setValue('rate', evt.target.value);
+                      trigger('rate');
+                    }}
                   />
                   <label
                     className="rate__label"
@@ -87,12 +162,17 @@ export default function ModalAddReview() {
                   >
                   </label>
                   <input
+                    {...register('rate', {
+                      required: 'Укажите оценку'
+                    })}
                     className="visually-hidden"
                     id="star-2"
-                    name="rate"
                     type="radio"
                     value="2"
-                    onChange={(evt) => setReview((prevState) => ({...prevState, rating: +(evt.target.value)}))}
+                    onChange={(evt) => {
+                      setValue('rate', evt.target.value);
+                      trigger('rate');
+                    }}
                   />
                   <label
                     className="rate__label"
@@ -101,12 +181,17 @@ export default function ModalAddReview() {
                   >
                   </label>
                   <input
+                    {...register('rate', {
+                      required: 'Укажите оценку'
+                    })}
                     className="visually-hidden"
                     id="star-1"
-                    name="rate"
                     type="radio"
                     value="1"
-                    onChange={(evt) => setReview((prevState) => ({...prevState, rating: +(evt.target.value)}))}
+                    onChange={(evt) => {
+                      setValue('rate', evt.target.value);
+                      trigger('rate');
+                    }}
                   />
                   <label
                     className="rate__label"
@@ -116,97 +201,123 @@ export default function ModalAddReview() {
                   </label>
                 </div>
                 <div className="rate__progress">
-                  <span className="rate__stars">{review.rating}</span> <span>/</span>
+                  <span className="rate__stars">{getValues().rate || 0}</span>
+                  <span>/</span>
                   <span className="rate__all-stars">5</span>
                 </div>
               </div>
-              <p className="rate__message">Нужно оценить товар</p>
+              {errors.rate && <p style={{opacity: 1}} className="rate__message">{errors.rate.message as string}</p>}
             </fieldset>
             <div className="custom-input form-review__item">
-              <label >
-                <span className="custom-input__label">Ваше имя
+              <label>
+                <span className="custom-input__label">
+                  Ваше имя
                   <svg width="9" height="9" aria-hidden="true">
                     <use xlinkHref="#icon-snowflake"></use>
                   </svg>
                 </span>
                 <input
-                  ref={firstInputRef}
-                  onChange={(evt) => setReview((prevState) => ({...prevState, userName: evt.target.value}))}
-                  value={review?.userName}
+                  {...register('userName', {
+                    required: 'Нужно указать имя',
+                    validate: {
+                      checkName
+                    }
+                  })}
                   type="text"
-                  name="user-name"
                   placeholder="Введите ваше имя"
-                  required
+                  ref={(el) => {
+                    firstInputRef.current = el;
+                  }}
+                  onChange={(evt) => {
+                    setValue('userName', evt.target.value);
+                    trigger('userName');
+                  }}
                 />
               </label>
-              <p className="custom-input__error">Нужно указать имя</p>
+
+              {errors.userName &&
+              <p className="custom-input__error" style={{opacity: 1}} >
+                {errors.userName.message as string}
+              </p>}
             </div>
             <div className="custom-input form-review__item">
-              <label >
-                <span className="custom-input__label">Достоинства
+              <label>
+                <span className="custom-input__label">
+                  Достоинства
                   <svg width="9" height="9" aria-hidden="true">
                     <use xlinkHref="#icon-snowflake"></use>
                   </svg>
                 </span>
                 <input
-                  value={review.advantage}
-                  onChange={(evt) => setReview((prevState) => ({...prevState, advantage: evt.target.value}))}
+                  {...register('advantages', {
+                    required: 'Нужно указать достоинства',
+                    validate: {
+                      checkAdvantages
+                    }
+                  })}
                   type="text"
-                  name="user-plus"
                   placeholder="Основные преимущества товара"
-                  required
                 />
               </label>
-              <p className="custom-input__error">
-                        Нужно указать достоинства
-              </p>
+              {errors.advantages && (
+                <p className="custom-input__error" style={{opacity: 1}} >
+                  {errors.advantages.message as string}
+                </p>
+              )}
             </div>
             <div className="custom-input form-review__item">
-              <label >
-                <span className="custom-input__label">Недостатки
+              <label>
+                <span className="custom-input__label">
+                  Недостатки
                   <svg width="9" height="9" aria-hidden="true">
                     <use xlinkHref="#icon-snowflake"></use>
                   </svg>
                 </span>
                 <input
-                  value={review.disadvantage}
-                  onChange={(evt) => setReview((prevState) => ({...prevState, disadvantage: evt.target.value}))}
+                  {...register('disadvantages', {
+                    required: 'Нужно указать недостатки',
+                    validate: {
+                      checkDisadvantages
+                    }
+                  })}
                   type="text"
-                  name="user-minus"
                   placeholder="Главные недостатки товара"
-                  required
                 />
               </label>
-              <p className="custom-input__error">
-                        Нужно указать недостатки
-              </p>
+              {errors.disadvantages && (
+                <p className="custom-input__error" style={{opacity: 1}} >
+                  {errors.disadvantages.message as string}
+                </p>
+              )}
             </div>
             <div className="custom-textarea form-review__item">
-              <label >
-                <span className="custom-textarea__label">Комментарий
+              <label>
+                <span className="custom-textarea__label">
+                  Комментарий
                   <svg width="9" height="9" aria-hidden="true">
                     <use xlinkHref="#icon-snowflake"></use>
                   </svg>
                 </span>
                 <textarea
-                  value={review.review}
-                  onChange={(evt) => setReview((prevState) => ({...prevState, review: evt.target.value}))}
-                  name="user-comment"
-                  minLength={5}
                   placeholder="Поделитесь своим опытом покупки"
+                  {...register('review', {
+                    required: 'Нужно добавить комментарий',
+                    validate: {
+                      checkReview
+                    }
+                  })}
                 >
                 </textarea>
               </label>
-              <div className="custom-textarea__error">
-                        Нужно добавить комментарий
-              </div>
+              {errors.review && (
+                <div className="custom-textarea__error" style={{opacity: 1}} >
+                  {errors.review.message as string}
+                </div>
+              )}
             </div>
           </div>
-          <button
-            className="btn btn--purple form-review__btn"
-            type="submit"
-          >
-                    Отправить отзыв
+          <button className="btn btn--purple form-review__btn" type="submit">
+            Отправить отзыв
           </button>
         </form>
       </div>

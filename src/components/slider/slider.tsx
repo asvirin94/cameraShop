@@ -9,6 +9,7 @@ import { Navigation } from 'swiper/modules';
 import SwiperCore from 'swiper';
 import { SIMILAR_PRODUCTS_ON_PAGE_COUNT } from '../../consts';
 import { getproductOnPage } from '../../store/app-process/app-process.selectors';
+import RatingStars from '../rating-stars/rating-stars';
 
 
 export default function Slider() {
@@ -78,21 +79,7 @@ export default function Slider() {
                           </div>
                           <div className="product-card__info">
                             <div className="rate product-card__rate">
-                              <svg width="17" height="16" aria-hidden="true">
-                                <use xlinkHref="#icon-full-star"></use>
-                              </svg>
-                              <svg width="17" height="16" aria-hidden="true">
-                                <use xlinkHref="#icon-full-star"></use>
-                              </svg>
-                              <svg width="17" height="16" aria-hidden="true">
-                                <use xlinkHref="#icon-full-star"></use>
-                              </svg>
-                              <svg width="17" height="16" aria-hidden="true">
-                                <use xlinkHref="#icon-full-star"></use>
-                              </svg>
-                              <svg width="17" height="16" aria-hidden="true">
-                                <use xlinkHref="#icon-star"></use>
-                              </svg>
+                              <RatingStars rating={similarProduct.rating}/>
                               <p className="visually-hidden">
                                 Рейтинг: {similarProduct.rating}
                               </p>
