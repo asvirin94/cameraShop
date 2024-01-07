@@ -1,7 +1,11 @@
 /* eslint-env node */
 
 module.exports = {
-  env: { browser: true, es2022: true },
+  env: {
+    browser: true,
+    es2022: true,
+    jest: true
+  },
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',

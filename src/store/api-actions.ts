@@ -9,16 +9,23 @@ export const loadProductsAction = createAsyncThunk<
    {
     extra: AxiosInstance;
    }
->('loadProducts', async(_arg, {extra: api}) => {
+>('loadProducts', async(_arg, {extra: api, rejectWithValue, fulfillWithValue}) => {
   try {
-    const {data} = await api.get<ProductType[]>('cameras');
-    return data;
+    // const {data} = await api.get<ProductType[]>('cameras');
+    const data = await fetch('https://camera-shop.accelerator.pages.academy/cameras');
+    return fulfillWithValue(data);
   } catch (error) {
     toast.warn('Не получилось загрузить данные :( Пожалуйста, попробуйте чуть позднее');
     throw error;
   }
 
 });
+
+// export const loadProductsAction = createAsyncThunk('loadProducts', async (_, { rejectWithValue, fulfullWithValue}) => {
+//   const { data } = await api.get<ProductType[]>('cameras');
+//   if (!data) { rejectWithValue('Error') }
+//   return fulfullWithValue(res)
+// })
 
 export const loadPromosAction = createAsyncThunk<
 Promos,
