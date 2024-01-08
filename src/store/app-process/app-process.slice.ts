@@ -11,7 +11,7 @@ type InitialStateType = {
   isModalAddReviewOpen: boolean;
 };
 
-const initialState: InitialStateType = {
+export const initialState: InitialStateType = {
   currentPage: 0,
   productOnPage: undefined,
   productToAdd: undefined,
