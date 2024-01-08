@@ -11,7 +11,7 @@ type InitialStateType = {
   isProductsLoaded: boolean;
 }
 
-const initialState: InitialStateType = {
+export const initialState: InitialStateType = {
   products: [],
   promos: [],
   similarProducts: [],
