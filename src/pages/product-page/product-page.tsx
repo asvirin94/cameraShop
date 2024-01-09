@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getProducts } from '../../store/data-process/data-process.selectors';
 import {
@@ -16,6 +16,7 @@ import Slider from '../../components/slider/slider';
 import Reviews from '../../components/reviews/reviews';
 import { useEffect } from 'react';
 import RatingStars from '../../components/rating-stars/rating-stars';
+import { AppRoutes } from '../../consts';
 
 export default function ProductPage() {
   const { id, tab } = useParams();
@@ -61,20 +62,20 @@ export default function ProductPage() {
                 <div className="container">
                   <ul className="breadcrumbs__list">
                     <li className="breadcrumbs__item">
-                      <a className="breadcrumbs__link" href="index.html">
+                      <Link className="breadcrumbs__link" to={AppRoutes.Main}>
                         Главная
                         <svg width="5" height="8" aria-hidden="true">
                           <use xlinkHref="#icon-arrow-mini"></use>
                         </svg>
-                      </a>
+                      </Link>
                     </li>
                     <li className="breadcrumbs__item">
-                      <a className="breadcrumbs__link" href="catalog.html">
+                      <Link className="breadcrumbs__link" to={AppRoutes.Main}>
                         Каталог
                         <svg width="5" height="8" aria-hidden="true">
                           <use xlinkHref="#icon-arrow-mini"></use>
                         </svg>
-                      </a>
+                      </Link>
                     </li>
                     <li className="breadcrumbs__item">
                       <span className="breadcrumbs__link breadcrumbs__link--active">

@@ -5,7 +5,7 @@ import {
   loadReviewsAction,
   loadSimilarProductsAction,
 } from '../api-actions';
-import { dataSlice, initialState } from './data-process.slice';
+import { dataSlice, dataInitialState } from './data-process.slice';
 
 const mockProducts: ProductType[] = [
   {
@@ -74,7 +74,7 @@ const mockReviews: Review[] = [
 describe('data process testing', () => {
   test('should set loaded products', () => {
     const expectedState = dataSlice.reducer(
-      initialState,
+      dataInitialState,
       {type: loadProductsAction.fulfilled.type, payload: mockProducts}
     );
 
@@ -83,7 +83,7 @@ describe('data process testing', () => {
 
   test('should set similar products', () => {
     const expectedState = dataSlice.reducer(
-      initialState,
+      dataInitialState,
       {type: loadSimilarProductsAction.fulfilled.type, payload: mockSimilarProducts}
     );
 
@@ -92,7 +92,7 @@ describe('data process testing', () => {
 
   test('should set promo products', () => {
     const expectedState = dataSlice.reducer(
-      initialState,
+      dataInitialState,
       {type: loadPromosAction.fulfilled.type, payload: mockPromoProducts}
     );
 
@@ -101,7 +101,7 @@ describe('data process testing', () => {
 
   test('should set reviews', () => {
     const expectedState = dataSlice.reducer(
-      initialState,
+      dataInitialState,
       {type: loadReviewsAction.fulfilled.type, payload: mockReviews}
     );
 

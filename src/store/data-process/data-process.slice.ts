@@ -11,7 +11,7 @@ type InitialStateType = {
   isProductsLoaded: boolean;
 }
 
-export const initialState: InitialStateType = {
+export const dataInitialState: InitialStateType = {
   products: [],
   promos: [],
   similarProducts: [],
@@ -21,7 +21,7 @@ export const initialState: InitialStateType = {
 
 export const dataSlice = createSlice({
   name: NameSpace.Data,
-  initialState,
+  initialState: dataInitialState,
   reducers: {},
   extraReducers(builder) {
     builder

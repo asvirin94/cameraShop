@@ -11,7 +11,7 @@ type InitialStateType = {
   isModalAddReviewOpen: boolean;
 };
 
-export const initialState: InitialStateType = {
+export const appInitialState: InitialStateType = {
   currentPage: 0,
   productOnPage: undefined,
   productToAdd: undefined,
@@ -22,7 +22,7 @@ export const initialState: InitialStateType = {
 
 export const appSlice = createSlice({
   name: NameSpace.App,
-  initialState,
+  initialState: appInitialState,
   reducers: {
     setCurrentPage: (state, action: PayloadAction<number>) => {
       state.currentPage = action.payload;

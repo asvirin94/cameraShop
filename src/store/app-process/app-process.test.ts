@@ -1,13 +1,13 @@
 import { ProductType } from '../../types/types';
-import { appSlice, initialState } from './app-process.slice';
+import { appSlice, appInitialState } from './app-process.slice';
 
 describe('testing app process', () => {
   test('should set current page', () => {
     const action = appSlice.actions.setCurrentPage(20);
-    const result = appSlice.reducer(initialState, action);
+    const result = appSlice.reducer(appInitialState, action);
 
     const expectedState = {
-      ...initialState,
+      ...appInitialState,
       currentPage: 20
     };
 
@@ -16,10 +16,10 @@ describe('testing app process', () => {
 
   test('should set modal is open', () => {
     const action = appSlice.actions.setModalIsOpen(true);
-    const result = appSlice.reducer(initialState, action);
+    const result = appSlice.reducer(appInitialState, action);
 
     const expectedState = {
-      ...initialState,
+      ...appInitialState,
       isModalOpen: true
     };
 
@@ -28,10 +28,10 @@ describe('testing app process', () => {
 
   test('should set add to basket modal open', () => {
     const action = appSlice.actions.setisModalAddToBusketOpen(true);
-    const result = appSlice.reducer(initialState, action);
+    const result = appSlice.reducer(appInitialState, action);
 
     const expectedState = {
-      ...initialState,
+      ...appInitialState,
       isModalAddToBusketOpen: true
     };
 
@@ -40,10 +40,10 @@ describe('testing app process', () => {
 
   test('should set add review modal open', () => {
     const action = appSlice.actions.setIsModalAddReviewOpen(true);
-    const result = appSlice.reducer(initialState, action);
+    const result = appSlice.reducer(appInitialState, action);
 
     const expectedState = {
-      ...initialState,
+      ...appInitialState,
       isModalAddReviewOpen: true
     };
 
@@ -52,10 +52,10 @@ describe('testing app process', () => {
 
   test('should set all modals close', () => {
     const action = appSlice.actions.closeAllModal();
-    const result = appSlice.reducer(initialState, action);
+    const result = appSlice.reducer(appInitialState, action);
 
     const expectedState = {
-      ...initialState,
+      ...appInitialState,
       isModalAddToBusketOpen: false,
       isModalOpen: false,
       isModalAddReviewOpen: false
@@ -83,10 +83,10 @@ describe('testing app process', () => {
     };
 
     const action = appSlice.actions.setproductToAdd(productToAdd);
-    const result = appSlice.reducer(initialState, action);
+    const result = appSlice.reducer(appInitialState, action);
 
     const expectedState = {
-      ...initialState,
+      ...appInitialState,
       productToAdd
     };
 
@@ -112,10 +112,10 @@ describe('testing app process', () => {
     };
 
     const action = appSlice.actions.setProductOnPage(productOnPage);
-    const result = appSlice.reducer(initialState, action);
+    const result = appSlice.reducer(appInitialState, action);
 
     const expectedState = {
-      ...initialState,
+      ...appInitialState,
       productOnPage
     };
 
