@@ -15,5 +15,5 @@ export const VISIBLE_REVIEWS_PER_CLICK = 3;
 
 export const AppRoutes = {
   Main: '/',
-  Product: '/product/'
+  Product: 'product/'
 } as const;
