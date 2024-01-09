@@ -75,7 +75,7 @@ describe('data process testing', () => {
   test('should set loaded products', () => {
     const expectedState = dataSlice.reducer(
       initialState,
-      loadProductsAction.fulfilled(mockProducts, 'someArg', undefined)
+      {type: loadProductsAction.fulfilled.type, payload: mockProducts}
     );
 
     expect(expectedState.products).toEqual(mockProducts);
@@ -84,7 +84,7 @@ describe('data process testing', () => {
   test('should set similar products', () => {
     const expectedState = dataSlice.reducer(
       initialState,
-      loadSimilarProductsAction.fulfilled(mockSimilarProducts, 'someArg', 1)
+      {type: loadSimilarProductsAction.fulfilled.type, payload: mockSimilarProducts}
     );
 
     expect(expectedState.similarProducts).toEqual(mockSimilarProducts);
@@ -93,7 +93,7 @@ describe('data process testing', () => {
   test('should set promo products', () => {
     const expectedState = dataSlice.reducer(
       initialState,
-      loadPromosAction.fulfilled(mockPromoProducts, 'someArg', undefined)
+      {type: loadPromosAction.fulfilled.type, payload: mockPromoProducts}
     );
 
     expect(expectedState.promos).toEqual(mockPromoProducts);
@@ -102,7 +102,7 @@ describe('data process testing', () => {
   test('should set reviews', () => {
     const expectedState = dataSlice.reducer(
       initialState,
-      loadReviewsAction.fulfilled(mockReviews, 'someArg', 1)
+      {type: loadReviewsAction.fulfilled.type, payload: mockReviews}
     );
 
     expect(expectedState.reviews).toEqual(mockReviews);
