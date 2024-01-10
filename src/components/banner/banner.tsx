@@ -6,6 +6,8 @@ import 'swiper/css/pagination';
 import { EffectCreative } from 'swiper/modules';
 import { useAppSelector } from '../../hooks';
 import { getPromos } from '../../store/data-process/data-process.selectors';
+import { Link } from 'react-router-dom';
+import { AppRoutes } from '../../consts';
 
 
 export default function Banner() {
@@ -64,9 +66,9 @@ export default function Banner() {
                   <span className="banner__text">
               Профессиональная камера от&nbsp;известного производителя
                   </span>
-                  <a className="btn" href="#">
+                  <Link className="btn" to={`/${AppRoutes.Product}${promo.id}/description`}>
               Подробнее
-                  </a>
+                  </Link>
                 </p>
               </div>
             </SwiperSlide>
