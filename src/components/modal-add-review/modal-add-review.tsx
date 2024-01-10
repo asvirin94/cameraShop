@@ -223,6 +223,7 @@ export default function ModalAddReview() {
                       checkName
                     }
                   })}
+                  data-testid='userName'
                   type="text"
                   placeholder="Введите ваше имя"
                   ref={(el) => {

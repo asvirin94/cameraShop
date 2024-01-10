@@ -82,8 +82,6 @@ describe('App routing', () => {
       </Provider>
     );
 
-    screen.debug();
-
     expect(
       screen.queryByText('Характеристики')
     ).toBeInTheDocument();
