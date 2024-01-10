@@ -2,10 +2,11 @@ import { render, screen } from '@testing-library/react';
 import Banner from './banner';
 import { Promos } from '../../types/types';
 import { configureMockStore } from '@jedmao/redux-mock-store';
-import { NameSpace } from '../../consts';
+import { AppRoutes, NameSpace } from '../../consts';
 import { appInitialState } from '../../store/app-process/app-process.slice';
 import { dataInitialState } from '../../store/data-process/data-process.slice';
 import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
 
 const mockPromoProducts: Promos = [
   {
@@ -29,7 +30,9 @@ describe('Component: Banner', () => {
   test('should render correctly', () => {
     render(
       <Provider store={mockStore(initialState)}>
-        <Banner />
+        <MemoryRouter initialEntries={[AppRoutes.Main]}>
+          <Banner />
+        </MemoryRouter>
       </Provider>
     );
 

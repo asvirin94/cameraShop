@@ -2,21 +2,23 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getReviews } from '../../store/data-process/data-process.selectors';
 import { loadReviewsAction } from '../../store/api-actions';
-import * as dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 import { VISIBLE_REVIEWS_PER_CLICK } from '../../consts';
 import { setIsModalAddReviewOpen, setModalIsOpen } from '../../store/app-process/app-process.slice';
 import { getproductOnPage } from '../../store/app-process/app-process.selectors';
 import RatingStars from '../rating-stars/rating-stars';
+import { makeHumanDate, makeMachineDate } from '../../utils';
 
 export default function Reviews() {
   const dispatch = useAppDispatch();
-  const reviews = useAppSelector(getReviews);
+  const reviews = useAppSelector(getReviews).slice().sort((a, b) => {
+    const dateA = new Date(a.createAt).getTime();
+    const dateB = new Date(b.createAt).getTime();
+    return dateB - dateA;
+  });
   const id = useAppSelector(getproductOnPage)?.id;
 
   const [currentReviewSector, setCurrentReviewSector] = useState(0);
-
-  dayjs.locale('ru');
 
   useEffect(() => {
     let isMount = true;
@@ -31,14 +33,6 @@ export default function Reviews() {
   }, [id]);
 
   if (reviews) {
-    const sortedReviews = [...reviews].sort((a, b) => {
-      const dateA = dayjs(a.createAt);
-      const dateB = dayjs(b.createAt);
-      const diff = dateB.diff(dateA);
-
-      return diff;
-    });
-
     return (
       <div className="page-content__section">
         <section className="review-block">
@@ -54,7 +48,7 @@ export default function Reviews() {
               </button>
             </div>
             <ul className="review-block__list">
-              {sortedReviews
+              {reviews
                 .slice(
                   0,
                   Math.min(
@@ -69,9 +63,9 @@ export default function Reviews() {
                       <p className="title title--h4">{review.userName}</p>
                       <time
                         className="review-card__data"
-                        dateTime={dayjs(review.createAt).format('YYYY-MM-DD')}
+                        dateTime={makeMachineDate(review.createAt)}
                       >
-                        {dayjs(review.createAt).format('DD MMMM')}
+                        {makeHumanDate(review.createAt)}
                       </time>
                     </div>
                     <div className="rate review-card__rate">
