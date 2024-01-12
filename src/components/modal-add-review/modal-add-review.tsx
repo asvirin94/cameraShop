@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { closeAllModal } from '../../store/app-process/app-process.slice';
+import { closeAllModal, setIsModalAddReviewOpen, setIsModalNewReviewSuccessOpen } from '../../store/app-process/app-process.slice';
 import {
   getIsModalAddReviewOpen,
   getproductOnPage,
@@ -78,8 +78,9 @@ export default function ModalAddReview() {
 
     dispatch(sendNewReviewAction(newReview))
       .then(() => {
-        dispatch(closeAllModal());
         dispatch(loadReviewsAction(productId as number));
+        dispatch(setIsModalAddReviewOpen(false));
+        dispatch(setIsModalNewReviewSuccessOpen(true));
       });
   };
 

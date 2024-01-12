@@ -9,6 +9,7 @@ type InitialStateType = {
   isModalOpen: boolean;
   isModalAddToBusketOpen: boolean;
   isModalAddReviewOpen: boolean;
+  isModalNewReviewSuccessOpen: boolean;
 };
 
 export const appInitialState: InitialStateType = {
@@ -18,6 +19,7 @@ export const appInitialState: InitialStateType = {
   isModalOpen: false,
   isModalAddToBusketOpen: false,
   isModalAddReviewOpen: false,
+  isModalNewReviewSuccessOpen: false
 };
 
 export const appSlice = createSlice({
@@ -40,6 +42,7 @@ export const appSlice = createSlice({
       state.isModalAddToBusketOpen = false;
       state.isModalOpen = false;
       state.isModalAddReviewOpen = false;
+      state.isModalNewReviewSuccessOpen = false;
     },
     setproductToAdd: (
       state,
@@ -53,6 +56,12 @@ export const appSlice = createSlice({
     ) => {
       state.productOnPage = action.payload;
     },
+    setIsModalNewReviewSuccessOpen: (
+      state,
+      action: PayloadAction<boolean>
+    ) => {
+      state.isModalNewReviewSuccessOpen = action.payload;
+    }
   },
 });
 
@@ -64,4 +73,5 @@ export const {
   setproductToAdd,
   setIsModalAddReviewOpen,
   setProductOnPage,
+  setIsModalNewReviewSuccessOpen
 } = appSlice.actions;
