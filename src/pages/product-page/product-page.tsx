@@ -117,7 +117,7 @@ export default function ProductPage() {
                       </div>
                       <p className="product__price">
                         <span className="visually-hidden">Цена:</span>
-                        {product.price} ₽
+                        {product.price.toLocaleString('ru-Ru')} ₽
                       </p>
                       <button
                         className="btn btn--purple"

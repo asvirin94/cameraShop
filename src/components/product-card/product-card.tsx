@@ -41,7 +41,7 @@ export default function ProductCard(props: Props) {
           {product.name}
         </p>
         <p className="product-card__price">
-          <span className="visually-hidden">Цена:</span>{product.price} ₽
+          <span className="visually-hidden">Цена:</span>{product.price.toLocaleString('ru-RU')} ₽
         </p>
       </div>
       <div className="product-card__buttons">
