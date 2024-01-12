@@ -29,13 +29,15 @@ export default function ProductPage() {
   useEffect(() => {
     let isMount = true;
 
-    if(isMount) {
-      dispatch(setProductOnPage(product));
-      document.addEventListener('keydown', (evt) => {
-        if(evt.key === 'Escape') {
-          dispatch(closeAllModal());
-        }
-      });
+    if (isMount) {
+      if (product) {
+        dispatch(setProductOnPage(product));
+        document.addEventListener('keydown', (evt) => {
+          if (evt.key === 'Escape') {
+            dispatch(closeAllModal());
+          }
+        });
+      }
     }
 
     return () => {
@@ -47,7 +49,6 @@ export default function ProductPage() {
     tab === 'properties' ? 'tabs__element is-active' : 'tabs__element';
   const descriptionTabClassname =
     tab === 'description' ? 'tabs__element is-active' : 'tabs__element';
-
 
   if (product && products) {
     return (
@@ -105,7 +106,7 @@ export default function ProductPage() {
                     <div className="product__content">
                       <h1 className="title title--h3">{product.name}</h1>
                       <div className="rate product__rate">
-                        <RatingStars rating={product.rating}/>
+                        <RatingStars rating={product.rating} />
                         <p className="visually-hidden">
                           Рейтинг: {product.rating}
                         </p>
@@ -212,7 +213,7 @@ export default function ProductPage() {
               <Slider />
               <Reviews />
             </div>
-            <Modal/>
+            <Modal />
           </main>
           <a
             className="up-btn"
