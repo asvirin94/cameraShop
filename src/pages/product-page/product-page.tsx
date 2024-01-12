@@ -49,8 +49,7 @@ export default function ProductPage() {
     tab === 'description' ? 'tabs__element is-active' : 'tabs__element';
 
 
-  if (product) {
-
+  if (product && products) {
     return (
       <>
         <Helmet title={product.name}></Helmet>
@@ -232,6 +231,10 @@ export default function ProductPage() {
       </>
     );
   } else {
-    return null;
+    return (
+      <div>
+        <b>Loading...</b>
+      </div>
+    );
   }
 }
