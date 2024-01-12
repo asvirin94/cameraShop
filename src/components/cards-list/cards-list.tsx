@@ -8,7 +8,7 @@ export default function CardsList() {
   const products = useAppSelector(getProducts);
   const currentPage = useAppSelector(getCurrentPage);
 
-  const productsOnPage = products.length > 9 && currentPage !== null
+  const productsOnPage = products.length > PRODUCTS_ON_PAGE_COUNT && currentPage !== null
     ? products.slice(currentPage * PRODUCTS_ON_PAGE_COUNT, (currentPage * PRODUCTS_ON_PAGE_COUNT + PRODUCTS_ON_PAGE_COUNT))
     : products;
 
