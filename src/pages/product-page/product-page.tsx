@@ -58,6 +58,7 @@ export default function ProductPage() {
 
   if(!product || (tab !== 'properties' && tab !== 'description')) {
     navigate('/not-found', {replace: true});
+    return null;
   }
 
   if(product) {
