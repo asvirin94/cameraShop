@@ -36,7 +36,7 @@ export default function ModalAddToBusket() {
             <li className="basket-item__list-item">{product?.level} уровень</li>
           </ul>
           <p className="basket-item__price">
-            <span className="visually-hidden">Цена:</span>{product?.price} ₽
+            <span className="visually-hidden">Цена:</span>{product?.price.toLocaleString('ru-RU')} ₽
           </p>
         </div>
       </div>

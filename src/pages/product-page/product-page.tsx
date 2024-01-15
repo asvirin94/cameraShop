@@ -50,7 +50,17 @@ export default function ProductPage() {
   const descriptionTabClassname =
     tab === 'description' ? 'tabs__element is-active' : 'tabs__element';
 
-  if (product && products) {
+  if(!products) {
+    return (
+      <div>Loading...</div>
+    );
+  }
+
+  if(!product || (tab !== 'properties' && tab !== 'description')) {
+    navigate('/not-found', {replace: true});
+  }
+
+  if(product) {
     return (
       <>
         <Helmet title={product.name}></Helmet>
@@ -63,7 +73,7 @@ export default function ProductPage() {
                   <ul className="breadcrumbs__list">
                     <li className="breadcrumbs__item">
                       <Link className="breadcrumbs__link" to={AppRoutes.Main}>
-                        Главная
+                      Главная
                         <svg width="5" height="8" aria-hidden="true">
                           <use xlinkHref="#icon-arrow-mini"></use>
                         </svg>
@@ -71,7 +81,7 @@ export default function ProductPage() {
                     </li>
                     <li className="breadcrumbs__item">
                       <Link className="breadcrumbs__link" to={AppRoutes.Main}>
-                        Каталог
+                      Каталог
                         <svg width="5" height="8" aria-hidden="true">
                           <use xlinkHref="#icon-arrow-mini"></use>
                         </svg>
@@ -108,7 +118,7 @@ export default function ProductPage() {
                       <div className="rate product__rate">
                         <RatingStars rating={product.rating} />
                         <p className="visually-hidden">
-                          Рейтинг: {product.rating}
+                        Рейтинг: {product.rating}
                         </p>
                         <p className="rate__count">
                           <span className="visually-hidden">Всего оценок:</span>
@@ -131,7 +141,7 @@ export default function ProductPage() {
                         <svg width="24" height="16" aria-hidden="true">
                           <use xlinkHref="#icon-add-basket"></use>
                         </svg>
-                        Добавить в корзину
+                      Добавить в корзину
                       </button>
                       <div className="tabs product__tabs">
                         <div className="tabs__controls product__tabs-controls">
@@ -146,7 +156,7 @@ export default function ProductPage() {
                               }
                             }}
                           >
-                            Характеристики
+                          Характеристики
                           </button>
                           <button
                             className={`tabs__control ${
@@ -159,23 +169,21 @@ export default function ProductPage() {
                               }
                             }}
                           >
-                            Описание
+                          Описание
                           </button>
                         </div>
                         <div className="tabs__content">
                           <div className={propertyTabClassname}>
                             <ul className="product__tabs-list">
                               <li className="item-list">
-                                <span className="item-list__title">
-                                  Артикул:
-                                </span>
+                                <span className="item-list__title">Артикул:</span>
                                 <p className="item-list__text">
                                   {product.vendorCode}
                                 </p>
                               </li>
                               <li className="item-list">
                                 <span className="item-list__title">
-                                  Категория:
+                                Категория:
                                 </span>
                                 <p className="item-list__text">
                                   {product.category}
@@ -183,19 +191,13 @@ export default function ProductPage() {
                               </li>
                               <li className="item-list">
                                 <span className="item-list__title">
-                                  Тип камеры:
+                                Тип камеры:
                                 </span>
-                                <p className="item-list__text">
-                                  {product.type}
-                                </p>
+                                <p className="item-list__text">{product.type}</p>
                               </li>
                               <li className="item-list">
-                                <span className="item-list__title">
-                                  Уровень:
-                                </span>
-                                <p className="item-list__text">
-                                  {product.level}
-                                </p>
+                                <span className="item-list__title">Уровень:</span>
+                                <p className="item-list__text">{product.level}</p>
                               </li>
                             </ul>
                           </div>
@@ -230,12 +232,6 @@ export default function ProductPage() {
           <Footer />
         </div>
       </>
-    );
-  } else {
-    return (
-      <div>
-        <b>Loading...</b>
-      </div>
     );
   }
 }
