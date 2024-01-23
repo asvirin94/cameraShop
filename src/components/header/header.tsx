@@ -1,14 +1,41 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import classNames from 'classnames';
+import { useEffect, useRef, useState } from 'react';
+import { getProducts } from '../../store/data-process/data-process.selectors';
+import { useAppSelector } from '../../hooks';
+import { AppRoutes } from '../../consts';
 
 export default function Header() {
+  const products = useAppSelector(getProducts);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
+  const [searchValue, setSearchValue] = useState('');
+  const { id } = useParams();
+
+  useEffect(() => {
+    setSearchValue('');
+  }, [id]);
+
+  useEffect(() => {
+    if(listRef.current) {
+      listRef.current.scrollTop = 0;
+    }
+  }, [searchValue]);
+
+  const relativeProducts = products.filter((product) =>
+    product.name.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase())
+  );
+
+  const handleInputChange = () => {
+    if (searchInputRef.current) {
+      setSearchValue(searchInputRef.current.value);
+    }
+  };
+
   return (
     <header className="header" id="header">
       <div className="container">
-        <Link
-          className="header__logo"
-          to='/'
-          aria-label="Переход на главную"
-        >
+        <Link className="header__logo" to="/" aria-label="Переход на главную">
           <svg width="100" height="36" aria-hidden="true">
             <use xlinkHref="#icon-logo"></use>
           </svg>
@@ -16,20 +43,34 @@ export default function Header() {
         <nav className="main-nav header__main-nav">
           <ul className="main-nav__list">
             <li className="main-nav__item">
-              <Link className="main-nav__link" to='/'>Каталог</Link>
+              <Link className="main-nav__link" to="/">
+                Каталог
+              </Link>
             </li>
             <li className="main-nav__item">
-              <a className="main-nav__link" href="#">Гарантии</a>
+              <a className="main-nav__link" href="#">
+                Гарантии
+              </a>
             </li>
             <li className="main-nav__item">
-              <a className="main-nav__link" href="#">Доставка</a>
+              <a className="main-nav__link" href="#">
+                Доставка
+              </a>
             </li>
             <li className="main-nav__item">
-              <a className="main-nav__link" href="#">О компании</a>
+              <a className="main-nav__link" href="#">
+                О компании
+              </a>
             </li>
           </ul>
         </nav>
-        <div className="form-search">
+
+        <div
+          className={classNames('form-search', {
+            'list-opened':
+              searchValue.length > 2 && relativeProducts.length > 0,
+          })}
+        >
           <form>
             <label>
               <svg
@@ -41,36 +82,43 @@ export default function Header() {
                 <use xlinkHref="#icon-lens"></use>
               </svg>
               <input
+                onChange={handleInputChange}
                 className="form-search__input"
                 type="text"
                 autoComplete="off"
                 placeholder="Поиск по сайту"
+                ref={searchInputRef}
+                value={searchValue}
               />
             </label>
-            <ul className="form-search__select-list">
-              <li className="form-search__select-item" tabIndex={0}>
-                  Cannonball Pro MX 8i
-              </li>
-              <li className="form-search__select-item" tabIndex={0}>
-                  Cannonball Pro MX 7i
-              </li>
-              <li className="form-search__select-item" tabIndex={0}>
-                  Cannonball Pro MX 6i
-              </li>
-              <li className="form-search__select-item" tabIndex={0}>
-                  Cannonball Pro MX 5i
-              </li>
-              <li className="form-search__select-item" tabIndex={0}>
-                  Cannonball Pro MX 4i
-              </li>
+            <ul className="form-search__select-list" style={{}} ref={listRef}>
+              {relativeProducts.map((product) => (
+                <Link to={`/${AppRoutes.Product}${product.id}/description`} key={product.name}>
+                  <li
+                    className="form-search__select-item"
+                    tabIndex={0}
+                  >
+                    {product.name}
+                  </li>
+                </Link>
+              ))}
             </ul>
           </form>
-          <button className="form-search__reset" type="reset">
+          <button
+            className="form-search__reset"
+            type="reset"
+            onClick={() => setSearchValue('')}
+            style={{
+              display: searchValue.length > 0 ? 'inline-block' : 'none',
+            }}
+          >
             <svg width="10" height="10" aria-hidden="true">
               <use xlinkHref="#icon-close"></use>
-            </svg><span className="visually-hidden">Сбросить поиск</span>
+            </svg>
+            <span className="visually-hidden">Сбросить поиск</span>
           </button>
         </div>
+
         <a className="header__basket-link" href="#">
           <svg width="16" height="16" aria-hidden="true">
             <use xlinkHref="#icon-basket"></use>
