@@ -4,13 +4,18 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getCurrentPage } from '../../store/app-process/app-process.selectors';
 import { setCurrentPage } from '../../store/app-process/app-process.slice';
 import { getProducts } from '../../store/data-process/data-process.selectors';
+import { getSortDirection, getSortType } from '../../store/sort-process/sort-process.selectors';
 
 export default function Pagination() {
   const dispatch = useAppDispatch();
   const products = useAppSelector(getProducts);
   const currentPage = useAppSelector(getCurrentPage);
+  const sortType = useAppSelector(getSortType);
+  const sortDirection = useAppSelector(getSortDirection);
   const currentSector = Math.floor(currentPage / PAGES_COUNT_IN_PAGGINATION_SECTOR);
 
+  const sortTypeUrl = sortType ? `&sortType=${sortType}` : '';
+  const sortDirectionUrl = sortDirection ? `&sortDirection=${sortDirection}` : '';
   const pagesCount = Math.ceil(products.length / PRODUCTS_ON_PAGE_COUNT);
   const sectorsCount = Math.ceil(pagesCount / PAGES_COUNT_IN_PAGGINATION_SECTOR);
   const pagginationLength = Math.min(PAGES_COUNT_IN_PAGGINATION_SECTOR, pagesCount - currentSector * PAGES_COUNT_IN_PAGGINATION_SECTOR);
@@ -26,7 +31,7 @@ export default function Pagination() {
         });
       }} style={{cursor: 'pointer'}}
       >
-        <Link to={`/?page=${(currentSector + 1) * PAGES_COUNT_IN_PAGGINATION_SECTOR + 1}`} className='pagination__link pagination__link--text'>
+        <Link to={`/?page=${(currentSector + 1) * PAGES_COUNT_IN_PAGGINATION_SECTOR + 1}${sortTypeUrl}${sortDirectionUrl}`} className='pagination__link pagination__link--text'>
         Далее
         </Link>
       </li>
@@ -43,7 +48,7 @@ export default function Pagination() {
         });
       }} style={{cursor: 'pointer'}}
       >
-        <Link to={`/?page=${(currentSector - 1) * PAGES_COUNT_IN_PAGGINATION_SECTOR + 3}`} className='pagination__link pagination__link--text'>
+        <Link to={`/?page=${(currentSector - 1) * PAGES_COUNT_IN_PAGGINATION_SECTOR + 3}${sortTypeUrl}${sortDirectionUrl}`} className='pagination__link pagination__link--text'>
           Назад
         </Link>
       </li>
@@ -64,7 +69,7 @@ export default function Pagination() {
               });
             }}
             >
-              <Link to={`/?page=${currentSector * PAGES_COUNT_IN_PAGGINATION_SECTOR + index + 1}`}
+              <Link to={`/?page=${currentSector * PAGES_COUNT_IN_PAGGINATION_SECTOR + index + 1}${sortTypeUrl}${sortDirectionUrl}`}
                 className={`pagination__link ${currentSector * PAGES_COUNT_IN_PAGGINATION_SECTOR + index === currentPage ? 'pagination__link--active' : ''}`}
                 style={{cursor: 'pointer'}}
               >{currentSector * PAGES_COUNT_IN_PAGGINATION_SECTOR + index + 1}

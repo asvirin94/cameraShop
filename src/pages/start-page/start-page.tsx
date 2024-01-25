@@ -8,22 +8,22 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { setCurrentPage } from '../../store/app-process/app-process.slice';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { getCurrentPage } from '../../store/app-process/app-process.selectors';
+import { useAppDispatch } from '../../hooks';
 import { setSortDirection, setSortType } from '../../store/sort-process/sort-process.slice';
 
 export default function StartPage() {
   const dispatch = useAppDispatch();
-  const currentPage = useAppSelector(getCurrentPage);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const page = searchParams.get('page');
-  const sortType = searchParams.get('type');
-  const sortDirection = searchParams.get('direction');
+  const sortType = searchParams.get('sortType');
+  const sortDirection = searchParams.get('sortDirection');
 
   useEffect(() => {
-    if(page && +page !== currentPage) {
+    if(page) {
       dispatch(setCurrentPage(+page - 1));
+    } else {
+      dispatch(setCurrentPage(0));
     }
   }, [page]);
 
