@@ -1,6 +1,7 @@
 export const NameSpace = {
   Data: 'DATA',
-  App: 'APP'
+  App: 'APP',
+  Sort: 'SORT'
 } as const;
 
 export const STARS_COUNT = 5;

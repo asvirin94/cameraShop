@@ -1,4 +1,29 @@
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import {
+  getSortDirection,
+  getSortType,
+} from '../../store/sort-process/sort-process.selectors';
+import { setSortDirection, setSortType } from '../../store/sort-process/sort-process.slice';
+
 export default function Sorts() {
+  const dispatch = useAppDispatch();
+  const sortType = useAppSelector(getSortType);
+  const sortDirection = useAppSelector(getSortDirection);
+
+  const sortDirectionHandler = (direction: string) => {
+    if(!sortType) {
+      dispatch(setSortType('price'));
+    }
+    dispatch(setSortDirection(direction));
+  };
+
+  const sortTypeHandler = (type: string) => {
+    if(!sortDirection) {
+      dispatch(setSortDirection('fromLowToHigh'));
+    }
+    dispatch(setSortType(type));
+  };
+
   return (
     <div className="catalog-sort">
       <form action="#">
@@ -7,15 +32,22 @@ export default function Sorts() {
           <div className="catalog-sort__type">
             <div className="catalog-sort__btn-text">
               <input
+                onChange={() => sortTypeHandler('price')}
                 type="radio"
                 id="sortPrice"
                 name="sort"
-                defaultChecked
+                checked={sortType === 'price'}
               />
               <label htmlFor="sortPrice">по цене</label>
             </div>
             <div className="catalog-sort__btn-text">
-              <input type="radio" id="sortPopular" name="sort" />
+              <input
+                onChange={() => sortTypeHandler('popularity')}
+                type="radio"
+                id="sortPopular"
+                name="sort"
+                checked={sortType === 'popularity'}
+              />
               <label htmlFor="sortPopular">по популярности</label>
             </div>
           </div>
@@ -25,8 +57,9 @@ export default function Sorts() {
                 type="radio"
                 id="up"
                 name="sort-icon"
-                defaultChecked
                 aria-label="По возрастанию"
+                onChange={() => sortDirectionHandler('fromLowToHigh')}
+                checked={sortDirection === 'fromLowToHigh'}
               />
               <label htmlFor="up">
                 <svg width="16" height="14" aria-hidden="true">
@@ -34,14 +67,14 @@ export default function Sorts() {
                 </svg>
               </label>
             </div>
-            <div
-              className="catalog-sort__btn catalog-sort__btn--down"
-            >
+            <div className="catalog-sort__btn catalog-sort__btn--down">
               <input
                 type="radio"
                 id="down"
                 name="sort-icon"
                 aria-label="По убыванию"
+                checked={sortDirection === 'fromHighToLow'}
+                onChange={() => sortDirectionHandler('fromHighToLow')}
               />
               <label htmlFor="down">
                 <svg width="16" height="14" aria-hidden="true">

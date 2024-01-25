@@ -10,6 +10,7 @@ import { useLocation } from 'react-router-dom';
 import { setCurrentPage } from '../../store/app-process/app-process.slice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getCurrentPage } from '../../store/app-process/app-process.selectors';
+import { setSortDirection, setSortType } from '../../store/sort-process/sort-process.slice';
 
 export default function StartPage() {
   const dispatch = useAppDispatch();
@@ -17,12 +18,21 @@ export default function StartPage() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const page = searchParams.get('page');
+  const sortType = searchParams.get('type');
+  const sortDirection = searchParams.get('direction');
 
   useEffect(() => {
     if(page && +page !== currentPage) {
       dispatch(setCurrentPage(+page - 1));
     }
   }, [page]);
+
+  useEffect(() => {
+    if(sortDirection && sortType) {
+      dispatch(setSortDirection(sortDirection));
+      dispatch(setSortType(sortType));
+    }
+  }, [sortDirection, sortType]);
 
   return (
     <div className='wrapper'>
