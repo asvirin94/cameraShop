@@ -3,9 +3,11 @@ import { NameSpace } from '../consts';
 import { dataSlice } from './data-process/data-process.slice';
 import { appSlice } from './app-process/app-process.slice';
 import { sortSlice } from './sort-process/sort-process.slice';
+import { filterSlice } from './filter-process/filter-process.slice';
 
 export const rootReducer = combineReducers({
   [NameSpace.Data]: dataSlice.reducer,
   [NameSpace.App]: appSlice.reducer,
-  [NameSpace.Sort]: sortSlice.reducer
+  [NameSpace.Sort]: sortSlice.reducer,
+  [NameSpace.Filter]: filterSlice.reducer
 });

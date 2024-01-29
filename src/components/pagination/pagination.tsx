@@ -1,17 +1,23 @@
 import { Link } from 'react-router-dom';
 import { PAGES_COUNT_IN_PAGGINATION_SECTOR, PRODUCTS_ON_PAGE_COUNT } from '../../consts';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { getCurrentPage } from '../../store/app-process/app-process.selectors';
+import { getCurrentPage, getFilteredAndSortedProducts } from '../../store/app-process/app-process.selectors';
 import { setCurrentPage } from '../../store/app-process/app-process.slice';
 import { getProducts } from '../../store/data-process/data-process.selectors';
 import { getSortDirection, getSortType } from '../../store/sort-process/sort-process.selectors';
+import { getFilterCategory, getFilterType, getFilterLevel } from '../../store/filter-process/filter-process.selectors';
 
 export default function Pagination() {
   const dispatch = useAppDispatch();
-  const products = useAppSelector(getProducts);
+  const allProducts = useAppSelector(getProducts);
+  const filteredProducts = useAppSelector(getFilteredAndSortedProducts);
   const currentPage = useAppSelector(getCurrentPage);
   const sortType = useAppSelector(getSortType);
   const sortDirection = useAppSelector(getSortDirection);
+  const filterCategory = useAppSelector(getFilterCategory);
+  const filterType = useAppSelector(getFilterType);
+  const filterlevel = useAppSelector(getFilterLevel);
+  const products = filterCategory || filterType.length > 0 || filterlevel.length > 0 ? filteredProducts : allProducts;
   const currentSector = Math.floor(currentPage / PAGES_COUNT_IN_PAGGINATION_SECTOR);
 
   const sortTypeUrl = sortType ? `&sortType=${sortType}` : '';

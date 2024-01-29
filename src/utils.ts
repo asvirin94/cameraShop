@@ -24,3 +24,57 @@ export const getSortedProducts = (sortType: string | undefined, sortDirection: s
       return products;
   }
 };
+
+export const getFilteredProducts = (category: string | undefined, type: string[], level: string[], products: ProductType[]) => {
+  let result = products;
+
+  const categoryTranslate = category === 'video' ? 'Видеокамера' : 'Фотоаппарат';
+
+  const getTypeTranslate = (product: ProductType) => {
+    switch(product.type) {
+      case 'Коллекционная':
+        return 'collection';
+      case 'Моментальная':
+        return 'snapshot';
+      case 'Цифровая':
+        return 'digital';
+      case 'Плёночная':
+        return 'film';
+      default:
+        return 'error';
+    }
+  };
+
+  const getLevelTranslate = (product: ProductType) => {
+    switch(product.level) {
+      case 'Нулевой':
+        return 'zero';
+      case 'Любительский':
+        return 'non-professional';
+      case 'Профессиональный':
+        return 'professional';
+      default:
+        return 'error';
+    }
+  };
+
+  if(category) {
+    result = result.filter((product) => product.category === categoryTranslate);
+  }
+
+  if(type.length > 0) {
+    result = result.filter((product) => {
+      const productType = getTypeTranslate(product);
+      return type.includes(productType);
+    });
+  }
+
+  if(level.length > 0) {
+    result = result.filter((product) => {
+      const productLevel = getLevelTranslate(product);
+      return level.includes(productLevel);
+    });
+  }
+
+  return result;
+};

@@ -1,5 +1,5 @@
 import axios from 'axios';
-const URL = 'https://camera-shop.accelerator.pages.academy';
+const URL = 'https://camera-shop.accelerator.htmlacademy.pro';
 const TIMEOUT = 5000;
 
 export const createApi = () => {

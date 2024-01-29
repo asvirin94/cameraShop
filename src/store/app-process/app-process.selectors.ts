@@ -8,3 +8,4 @@ export const getIsModalNewReviewSuccess = (state: StateType) => state[NameSpace.
 export const getProductToAdd = (state: StateType) => state[NameSpace.App].productToAdd;
 export const getIsModalAddReviewOpen = (state: StateType) => state[NameSpace.App].isModalAddReviewOpen;
 export const getproductOnPage = (state: StateType) => state[NameSpace.App].productOnPage;
+export const getFilteredAndSortedProducts = (state: StateType) => state[NameSpace.App].filteredAndSortedProducts;
