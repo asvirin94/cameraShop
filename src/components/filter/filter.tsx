@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setCurrentPage } from '../../store/app-process/app-process.slice';
 import { getProducts } from '../../store/data-process/data-process.selectors';
@@ -7,17 +8,36 @@ import {
   getFilterType,
 } from '../../store/filter-process/filter-process.selectors';
 import {
+  resetFilters,
   setCategory,
   setLevel,
   setType,
 } from '../../store/filter-process/filter-process.slice';
+import {
+  getSortType,
+  getSortDirection,
+} from '../../store/sort-process/sort-process.selectors';
+import { useEffect } from 'react';
 
 export default function Filter() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const products = useAppSelector(getProducts);
+  const sortType = useAppSelector(getSortType);
+  const sortDirection = useAppSelector(getSortDirection);
   const filterCategory = useAppSelector(getFilterCategory);
   const filterType = useAppSelector(getFilterType);
   const filterlevel = useAppSelector(getFilterLevel);
+
+  useEffect(() => {
+    navigate(
+      `/?page=1${sortType ? `&sortType=${sortType}` : ''}${
+        sortDirection ? `&sortDirection=${sortDirection}` : ''
+      }${filterCategory ? `&filterCategory=${filterCategory}` : ''}${
+        filterType.length > 0 ? `&filterType=${filterType.join(',')}` : ''
+      }${filterlevel.length > 0 ? `&filterLevel=${filterlevel.join(',')}` : ''}`
+    );
+  }, [filterCategory, filterType, filterlevel]);
 
   const allProductsPrices = products.map((product) => product.price);
 
@@ -174,7 +194,7 @@ export default function Filter() {
               </label>
             </div>
           </fieldset>
-          <button className="btn catalog-filter__reset-btn" type="reset">
+          <button className="btn catalog-filter__reset-btn" type="reset" onClick={() => dispatch(resetFilters())}>
             Сбросить фильтры
           </button>
         </form>

@@ -1,25 +1,37 @@
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { getCurrentPage } from '../../store/app-process/app-process.selectors';
 import {
   getSortDirection,
   getSortType,
 } from '../../store/sort-process/sort-process.selectors';
 import { useNavigate } from 'react-router-dom';
 import { setSortDirection, setSortType } from '../../store/sort-process/sort-process.slice';
+import { getFilterCategory, getFilterType, getFilterLevel } from '../../store/filter-process/filter-process.selectors';
+import { useEffect } from 'react';
 
 export default function Sorts() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const currentPage = useAppSelector(getCurrentPage);
   const sortType = useAppSelector(getSortType);
   const sortDirection = useAppSelector(getSortDirection);
+  const filterCategory = useAppSelector(getFilterCategory);
+  const filterType = useAppSelector(getFilterType);
+  const filterlevel = useAppSelector(getFilterLevel);
+
+  useEffect(() => {
+    navigate(
+      `/?page=1${sortType ? `&sortType=${sortType}` : ''}${
+        sortDirection ? `&sortDirection=${sortDirection}` : ''
+      }${filterCategory ? `&filterCategory=${filterCategory}` : ''}${
+        filterType.length > 0 ? `&filterType=${filterType.join(',')}` : ''
+      }${filterlevel.length > 0 ? `&filterlevel=${filterlevel.join(',')}` : ''}`
+    );
+  }, [sortType, sortDirection]);
 
   const sortDirectionHandler = (direction: string) => {
     if(!sortType) {
       dispatch(setSortType('price'));
     }
     dispatch(setSortDirection(direction));
-    navigate(`/?page=${currentPage + 1}&sortType=${sortType ? sortType : 'price'}&sortDirection=${direction}`);
   };
 
   const sortTypeHandler = (type: string) => {
@@ -27,7 +39,6 @@ export default function Sorts() {
       dispatch(setSortDirection('fromLowToHigh'));
     }
     dispatch(setSortType(type));
-    navigate(`/?page=${currentPage + 1}&sortType=${type}&sortDirection=${sortDirection ? sortDirection : 'fromLowToHigh'}`);
   };
 
   return (

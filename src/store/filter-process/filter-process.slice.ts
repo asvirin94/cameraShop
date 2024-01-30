@@ -42,7 +42,12 @@ export const filterSlice = createSlice({
         state.level = [...state.level, action.payload];
       }
     },
+    resetFilters: (state) => {
+      state.category = undefined;
+      state.type = [];
+      state.level = [];
+    }
   }
 });
 
-export const {setCategory, setType, setLevel} = filterSlice.actions;
+export const {setCategory, setType, setLevel, resetFilters} = filterSlice.actions;
