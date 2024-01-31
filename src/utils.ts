@@ -3,15 +3,20 @@ import { ProductType } from './types/types';
 
 dayjs.locale('ru');
 
-export const makeMachineDate = (date: string) => dayjs(date).format('YYYY-MM-DD');
+export const makeMachineDate = (date: string) =>
+  dayjs(date).format('YYYY-MM-DD');
 export const makeHumanDate = (date: string) => dayjs(date).format('DD MMMM');
 
-export const getSortedProducts = (sortType: string | undefined, sortDirection: string | undefined, products: ProductType[]) => {
-  if(sortType === undefined && sortDirection === undefined) {
+export const getSortedProducts = (
+  sortType: string | undefined,
+  sortDirection: string | undefined,
+  products: ProductType[]
+) => {
+  if (sortType === undefined && sortDirection === undefined) {
     return products;
   }
 
-  switch(sortType) {
+  switch (sortType) {
     case 'price':
       return sortDirection === 'fromLowToHigh'
         ? [...products].sort((a, b) => a.price - b.price)
@@ -25,13 +30,21 @@ export const getSortedProducts = (sortType: string | undefined, sortDirection: s
   }
 };
 
-export const getFilteredProducts = (category: string | undefined, type: string[], level: string[], products: ProductType[]) => {
+export const getFilteredProducts = (
+  category: string | undefined,
+  type: string[],
+  level: string[],
+  minPrice: string | undefined,
+  maxPrice: string | undefined,
+  products: ProductType[]
+) => {
   let result = products;
 
-  const categoryTranslate = category === 'video' ? 'Видеокамера' : 'Фотоаппарат';
+  const categoryTranslate =
+    category === 'video' ? 'Видеокамера' : 'Фотоаппарат';
 
   const getTypeTranslate = (product: ProductType) => {
-    switch(product.type) {
+    switch (product.type) {
       case 'Коллекционная':
         return 'collection';
       case 'Моментальная':
@@ -46,7 +59,7 @@ export const getFilteredProducts = (category: string | undefined, type: string[]
   };
 
   const getLevelTranslate = (product: ProductType) => {
-    switch(product.level) {
+    switch (product.level) {
       case 'Нулевой':
         return 'zero';
       case 'Любительский':
@@ -58,22 +71,30 @@ export const getFilteredProducts = (category: string | undefined, type: string[]
     }
   };
 
-  if(category) {
+  if (category) {
     result = result.filter((product) => product.category === categoryTranslate);
   }
 
-  if(type.length > 0) {
+  if (type.length > 0) {
     result = result.filter((product) => {
       const productType = getTypeTranslate(product);
       return type.includes(productType);
     });
   }
 
-  if(level.length > 0) {
+  if (level.length > 0) {
     result = result.filter((product) => {
       const productLevel = getLevelTranslate(product);
       return level.includes(productLevel);
     });
+  }
+
+  if (minPrice) {
+    result = result.filter((product) => product.price >= +minPrice);
+  }
+
+  if(maxPrice) {
+    result = result.filter((product) => product.price <= +maxPrice);
   }
 
   return result;

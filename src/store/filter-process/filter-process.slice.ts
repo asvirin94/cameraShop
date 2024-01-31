@@ -5,12 +5,20 @@ type InitialState = {
   category: string | undefined;
   type: string[];
   level: string[];
+  price: {
+    min: string | undefined;
+    max: string | undefined;
+  };
 }
 
 const filterInitialState: InitialState = {
   category: undefined,
   type: [],
-  level: []
+  level: [],
+  price: {
+    min: undefined,
+    max: undefined
+  }
 };
 
 export const filterSlice = createSlice({
@@ -46,8 +54,16 @@ export const filterSlice = createSlice({
       state.category = undefined;
       state.type = [];
       state.level = [];
+      state.price.min = undefined;
+      state.price.max = undefined;
+    },
+    setMinPrice: (state, action: PayloadAction<string | undefined>) => {
+      state.price.min = action.payload;
+    },
+    setMaxPrice: (state, action: PayloadAction<string | undefined>) => {
+      state.price.max = action.payload;
     }
   }
 });
 
-export const {setCategory, setType, setLevel, resetFilters} = filterSlice.actions;
+export const {setCategory, setType, setLevel, resetFilters, setMinPrice, setMaxPrice} = filterSlice.actions;

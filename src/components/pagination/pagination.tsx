@@ -18,6 +18,8 @@ import {
   getFilterCategory,
   getFilterType,
   getFilterLevel,
+  getMaxPrice,
+  getMinPrice,
 } from '../../store/filter-process/filter-process.selectors';
 
 export default function Pagination() {
@@ -30,8 +32,11 @@ export default function Pagination() {
   const filterCategory = useAppSelector(getFilterCategory);
   const filterType = useAppSelector(getFilterType);
   const filterLevel = useAppSelector(getFilterLevel);
+  const minPrice = useAppSelector(getMinPrice);
+  const maxPrice = useAppSelector(getMaxPrice);
+
   const products =
-    filterCategory || filterType.length > 0 || filterLevel.length > 0
+    filterCategory || filterType.length > 0 || filterLevel.length > 0 || minPrice || maxPrice
       ? filteredProducts
       : allProducts;
   const currentSector = Math.floor(
@@ -45,6 +50,8 @@ export default function Pagination() {
   const filterCategoryUlr = filterCategory ? `&filterCategory=${filterCategory}` : '';
   const filterTypeUrl = filterType.length > 0 ? `&filterType=${filterType.join(',')}` : '';
   const filterLevelUrl = filterLevel.length > 0 ? `&filterLevel=${filterLevel.join(',')}` : '';
+  const minPriceUrl = minPrice ? `&minPrice=${minPrice}` : '';
+  const maxPriceUrl = maxPrice ? `&maxPrice=${maxPrice}` : '';
 
   const pagesCount = Math.ceil(products.length / PRODUCTS_ON_PAGE_COUNT);
   const sectorsCount = Math.ceil(
@@ -75,7 +82,7 @@ export default function Pagination() {
         <Link
           to={`/?page=${
             (currentSector + 1) * PAGES_COUNT_IN_PAGGINATION_SECTOR + 1
-          }${sortTypeUrl}${sortDirectionUrl}${filterCategoryUlr}${filterTypeUrl}${filterLevelUrl}`}
+          }${sortTypeUrl}${sortDirectionUrl}${filterCategoryUlr}${filterTypeUrl}${filterLevelUrl}${minPriceUrl}${maxPriceUrl}`}
           className="pagination__link pagination__link--text"
         >
           Далее
@@ -103,7 +110,7 @@ export default function Pagination() {
         <Link
           to={`/?page=${
             (currentSector - 1) * PAGES_COUNT_IN_PAGGINATION_SECTOR + 3
-          }${sortTypeUrl}${sortDirectionUrl}${filterCategoryUlr}${filterTypeUrl}${filterLevelUrl}`}
+          }${sortTypeUrl}${sortDirectionUrl}${filterCategoryUlr}${filterTypeUrl}${filterLevelUrl}${minPriceUrl}${maxPriceUrl}`}
           className="pagination__link pagination__link--text"
         >
           Назад
@@ -134,7 +141,7 @@ export default function Pagination() {
             <Link
               to={`/?page=${
                 currentSector * PAGES_COUNT_IN_PAGGINATION_SECTOR + index + 1
-              }${sortTypeUrl}${sortDirectionUrl}${filterCategoryUlr}${filterTypeUrl}${filterLevelUrl}`}
+              }${sortTypeUrl}${sortDirectionUrl}${filterCategoryUlr}${filterTypeUrl}${filterLevelUrl}${minPriceUrl}${maxPriceUrl}`}
               className={`pagination__link ${
                 currentSector * PAGES_COUNT_IN_PAGGINATION_SECTOR + index ===
                 currentPage

@@ -6,18 +6,22 @@ import {
   getFilterCategory,
   getFilterLevel,
   getFilterType,
+  getMaxPrice,
+  getMinPrice,
 } from '../../store/filter-process/filter-process.selectors';
 import {
   resetFilters,
   setCategory,
   setLevel,
+  setMaxPrice,
+  setMinPrice,
   setType,
 } from '../../store/filter-process/filter-process.slice';
 import {
   getSortType,
   getSortDirection,
 } from '../../store/sort-process/sort-process.selectors';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Filter() {
   const dispatch = useAppDispatch();
@@ -28,6 +32,8 @@ export default function Filter() {
   const filterCategory = useAppSelector(getFilterCategory);
   const filterType = useAppSelector(getFilterType);
   const filterlevel = useAppSelector(getFilterLevel);
+  const minPrice = useAppSelector(getMinPrice);
+  const maxPrice = useAppSelector(getMaxPrice);
 
   useEffect(() => {
     navigate(
@@ -35,9 +41,41 @@ export default function Filter() {
         sortDirection ? `&sortDirection=${sortDirection}` : ''
       }${filterCategory ? `&filterCategory=${filterCategory}` : ''}${
         filterType.length > 0 ? `&filterType=${filterType.join(',')}` : ''
-      }${filterlevel.length > 0 ? `&filterLevel=${filterlevel.join(',')}` : ''}`
+      }${filterlevel.length > 0 ? `&filterLevel=${filterlevel.join(',')}` : ''}${
+        minPrice ? `&minPrice=${minPrice}` : ''
+      }${maxPrice ? `&maxPrice=${maxPrice}` : ''}`
     );
-  }, [filterCategory, filterType, filterlevel]);
+  }, [filterCategory, filterType, filterlevel, minPrice, maxPrice]);
+
+  const [componentMinPrice, setComponentMinPrice] = useState<string>();
+  const [componentMaxPrice, setComponentMaxPrice] = useState<string>();
+
+  useEffect(() => {
+    setComponentMinPrice(minPrice);
+    setComponentMaxPrice(maxPrice);
+  }, [minPrice, maxPrice]);
+
+  useEffect(() => {
+    if(componentMinPrice) {
+      const timer = setTimeout(() => dispatch(setMinPrice(componentMinPrice)), 1000);
+
+      return () => clearTimeout(timer);
+    } else {
+      const timer = setTimeout(() => dispatch(setMinPrice(undefined)), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [componentMinPrice]);
+
+  useEffect(() => {
+    if(componentMaxPrice) {
+      const timer = setTimeout(() => dispatch(setMaxPrice(componentMaxPrice)), 1000);
+
+      return () => clearTimeout(timer);
+    } else {
+      const timer = setTimeout(() => dispatch(setMaxPrice(undefined)), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [componentMaxPrice]);
 
   const allProductsPrices = products.map((product) => product.price);
 
@@ -54,7 +92,16 @@ export default function Filter() {
                   <input
                     type="number"
                     name="price"
-                    placeholder={`${Math.min(...allProductsPrices)}`}
+                    placeholder={products.length > 0 ? `${Math.min(...allProductsPrices)}` : '0'}
+                    value={componentMinPrice}
+                    onKeyDown={(e) => {
+                      if(e.key === '-') {
+                        e.preventDefault();
+                      }
+                    }}
+                    onChange={(e) => {
+                      setComponentMinPrice(e.target.value);
+                    }}
                   />
                 </label>
               </div>
@@ -63,7 +110,16 @@ export default function Filter() {
                   <input
                     type="number"
                     name="priceUp"
-                    placeholder={`${Math.max(...allProductsPrices)}`}
+                    placeholder={products.length > 0 ? `${Math.max(...allProductsPrices)}` : '0'}
+                    value={componentMaxPrice}
+                    onKeyDown={(e) => {
+                      if(e.key === '-') {
+                        e.preventDefault();
+                      }
+                    }}
+                    onChange={(e) => {
+                      setComponentMaxPrice(e.target.value);
+                    }}
                   />
                 </label>
               </div>

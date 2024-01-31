@@ -10,7 +10,7 @@ import { useLocation } from 'react-router-dom';
 import { setCurrentPage } from '../../store/app-process/app-process.slice';
 import { useAppDispatch } from '../../hooks';
 import { setSortDirection, setSortType } from '../../store/sort-process/sort-process.slice';
-import { setCategory, setLevel, setType } from '../../store/filter-process/filter-process.slice';
+import { setCategory, setLevel, setMaxPrice, setMinPrice, setType } from '../../store/filter-process/filter-process.slice';
 
 export default function StartPage() {
   const dispatch = useAppDispatch();
@@ -22,6 +22,8 @@ export default function StartPage() {
   const filterCategory = searchParams.get('filterCategory');
   const filterType = searchParams.get('filterType');
   const filterLevel = searchParams.get('filterLevel');
+  const minPrice = searchParams.get('minPrice');
+  const maxPrice = searchParams.get('maxPrice');
 
   const isMounted = useRef(false);
 
@@ -57,6 +59,16 @@ export default function StartPage() {
       }
     } else {
       isMounted.current = true;
+    }
+  }, []);
+
+  useEffect(() => {
+    if(minPrice) {
+      dispatch(setMinPrice(minPrice));
+    }
+
+    if(maxPrice) {
+      dispatch(setMaxPrice(maxPrice));
     }
   }, []);
 
