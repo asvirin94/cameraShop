@@ -8,6 +8,8 @@ import { MemoryRouter } from 'react-router-dom';
 import { ProductType, Promos } from '../../types/types';
 import { HelmetProvider } from 'react-helmet-async';
 import App from '../../components/app/app';
+import { filterInitialState } from '../../store/filter-process/filter-process.slice';
+import { sortInitialState } from '../../store/sort-process/sort-process.slice';
 
 const mockProducts: ProductType[] = [
   {
@@ -43,7 +45,9 @@ const mockPromoProducts: Promos = [
 const mockStore = configureMockStore();
 const initialState = {
   [NameSpace.Data]: {...dataInitialState, products: mockProducts, promos: mockPromoProducts},
-  [NameSpace.App]: {...appInitialState}
+  [NameSpace.App]: {...appInitialState},
+  [NameSpace.Filter]: filterInitialState,
+  [NameSpace.Sort]: sortInitialState
 };
 
 describe('Page: start page', () => {

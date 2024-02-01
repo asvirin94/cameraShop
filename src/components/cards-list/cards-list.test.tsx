@@ -7,6 +7,8 @@ import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import CardsList from './cards-list';
+import { filterInitialState } from '../../store/filter-process/filter-process.slice';
+import { sortInitialState } from '../../store/sort-process/sort-process.slice';
 
 describe('Component: cards-list', () => {
   const mockProduct: ProductType = {
@@ -32,8 +34,10 @@ describe('Component: cards-list', () => {
   test('should return all products at one time if count less or equal than 9', () => {
 
     const initialState = {
-      [NameSpace.Data]: {...dataInitialState, products: mockProductsArray},
+      [NameSpace.Data]: {...dataInitialState, products: mockProductsArray, isProductsLoaded: true},
       [NameSpace.App]: {...appInitialState},
+      [NameSpace.Filter]: filterInitialState,
+      [NameSpace.Sort]: {...sortInitialState, sortType: 'price', sortDirection: 'fromLowToHigh'}
     };
 
     const mockStore = configureMockStore();
@@ -45,14 +49,15 @@ describe('Component: cards-list', () => {
         </MemoryRouter>
       </Provider>
     );
-
     expect(container.getElementsByClassName('product-card').length).toBe(mockProductsArray.length);
   });
 
   test('should render correctly', () => {
     const initialState = {
-      [NameSpace.Data]: {...dataInitialState, products: mockProductsArray},
+      [NameSpace.Data]: {...dataInitialState, products: mockProductsArray, isProductsLoaded: true},
       [NameSpace.App]: appInitialState,
+      [NameSpace.Filter]: filterInitialState,
+      [NameSpace.Sort]: sortInitialState
     };
 
     const mockStore = configureMockStore();

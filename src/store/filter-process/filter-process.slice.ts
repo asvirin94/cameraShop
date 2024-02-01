@@ -11,7 +11,7 @@ type InitialState = {
   };
 }
 
-const filterInitialState: InitialState = {
+export const filterInitialState: InitialState = {
   category: undefined,
   type: [],
   level: [],

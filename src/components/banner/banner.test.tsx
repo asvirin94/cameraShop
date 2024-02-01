@@ -7,6 +7,8 @@ import { appInitialState } from '../../store/app-process/app-process.slice';
 import { dataInitialState } from '../../store/data-process/data-process.slice';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
+import { filterInitialState } from '../../store/filter-process/filter-process.slice';
+import { sortInitialState } from '../../store/sort-process/sort-process.slice';
 
 const mockPromoProducts: Promos = [
   {
@@ -24,6 +26,8 @@ const mockStore = configureMockStore();
 const initialState = {
   [NameSpace.Data]: { ...dataInitialState, promos: mockPromoProducts },
   [NameSpace.App]: appInitialState,
+  [NameSpace.Filter]: filterInitialState,
+  [NameSpace.Sort]: sortInitialState
 };
 
 describe('Component: Banner', () => {

@@ -8,6 +8,8 @@ import { dataInitialState } from '../../store/data-process/data-process.slice';
 import { appInitialState } from '../../store/app-process/app-process.slice';
 import { HelmetProvider } from 'react-helmet-async';
 import { ProductType } from '../../types/types';
+import { filterInitialState } from '../../store/filter-process/filter-process.slice';
+import { sortInitialState } from '../../store/sort-process/sort-process.slice';
 
 const mockProducts: ProductType[] = [
   {
@@ -33,7 +35,9 @@ const mockStore = configureMockStore();
 
 const initialState = {
   [NameSpace.Data]: {...dataInitialState, products: mockProducts},
-  [NameSpace.App]: appInitialState
+  [NameSpace.App]: appInitialState,
+  [NameSpace.Filter]: filterInitialState,
+  [NameSpace.Sort]: sortInitialState
 };
 
 describe('App routing', () => {

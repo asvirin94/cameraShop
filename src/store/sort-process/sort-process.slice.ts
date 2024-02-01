@@ -6,7 +6,7 @@ type InitialState = {
   sortDirection: string | undefined;
 }
 
-const sortInitialState: InitialState = {
+export const sortInitialState: InitialState = {
   sortType: undefined,
   sortDirection: undefined
 };

@@ -7,6 +7,8 @@ import { dataInitialState } from '../../store/data-process/data-process.slice';
 import { MemoryRouter } from 'react-router-dom';
 import Pagination from './pagination';
 import { ProductType } from '../../types/types';
+import { filterInitialState } from '../../store/filter-process/filter-process.slice';
+import { sortInitialState } from '../../store/sort-process/sort-process.slice';
 
 const mockProduct: ProductType = {
   id: 1,
@@ -34,6 +36,8 @@ describe('Component: pagination', () => {
     const initialState = {
       [NameSpace.Data]: {...dataInitialState, products: mockProductsArray},
       [NameSpace.App]: appInitialState,
+      [NameSpace.Filter]: filterInitialState,
+      [NameSpace.Sort]: sortInitialState
     };
 
     const {container} = render(
@@ -53,6 +57,8 @@ describe('Component: pagination', () => {
     const initialState = {
       [NameSpace.Data]: {...dataInitialState, products: mockProductsArray},
       [NameSpace.App]: appInitialState,
+      [NameSpace.Filter]: filterInitialState,
+      [NameSpace.Sort]: sortInitialState
     };
 
     const {container} = render(

@@ -7,6 +7,8 @@ import { dataInitialState } from '../../store/data-process/data-process.slice';
 import { MemoryRouter } from 'react-router-dom';
 import ProductCard from './product-card';
 import { ProductType } from '../../types/types';
+import { filterInitialState } from '../../store/filter-process/filter-process.slice';
+import { sortInitialState } from '../../store/sort-process/sort-process.slice';
 
 const mockProduct: ProductType = {
   id: 1,
@@ -30,6 +32,8 @@ const mockStore = configureMockStore();
 const initialState = {
   [NameSpace.Data]: dataInitialState,
   [NameSpace.App]: appInitialState,
+  [NameSpace.Filter]: filterInitialState,
+  [NameSpace.Sort]: sortInitialState
 };
 
 describe('Component: product card', () => {

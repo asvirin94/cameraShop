@@ -7,6 +7,8 @@ import { dataInitialState } from '../../store/data-process/data-process.slice';
 import { MemoryRouter } from 'react-router-dom';
 import { ProductType, Review } from '../../types/types';
 import Reviews from './reviews';
+import { filterInitialState } from '../../store/filter-process/filter-process.slice';
+import { sortInitialState } from '../../store/sort-process/sort-process.slice';
 
 const mockProducts: ProductType[] = [
   {
@@ -49,6 +51,8 @@ const initialState = {
     reviews: mockReviews,
   },
   [NameSpace.App]: appInitialState,
+  [NameSpace.Filter]: filterInitialState,
+  [NameSpace.Sort]: sortInitialState
 };
 
 describe('Component: reviews', () => {

@@ -45,7 +45,7 @@ describe('async actions', () => {
     ];
 
     mockAPI
-      .onGet('https://camera-shop.accelerator.pages.academy/cameras')
+      .onGet('https://camera-shop.accelerator.htmlacademy.pro/cameras')
       .reply(200, mockProducts);
 
     const store = mockStore();
@@ -73,7 +73,7 @@ describe('async actions', () => {
     ];
 
     mockAPI
-      .onGet('https://camera-shop.accelerator.pages.academy/promo')
+      .onGet('https://camera-shop.accelerator.htmlacademy.pro/promo')
       .reply(200, mockPromoProducts);
 
     const store = mockStore();
@@ -110,7 +110,7 @@ describe('async actions', () => {
     ];
 
     mockAPI
-      .onGet('https://camera-shop.accelerator.pages.academy/cameras/20/similar')
+      .onGet('https://camera-shop.accelerator.htmlacademy.pro/cameras/20/similar')
       .reply(200, mockSimilarProducts);
 
     const store = mockStore();
@@ -140,7 +140,7 @@ describe('async actions', () => {
     ];
 
     mockAPI
-      .onGet('https://camera-shop.accelerator.pages.academy/cameras/20/reviews')
+      .onGet('https://camera-shop.accelerator.htmlacademy.pro/cameras/20/reviews')
       .reply(200, mockReviews);
 
     const store = mockStore();
@@ -179,7 +179,7 @@ describe('async actions', () => {
     };
 
     mockAPI
-      .onPost('https://camera-shop.accelerator.pages.academy/reviews', mockNewReview)
+      .onPost('https://camera-shop.accelerator.htmlacademy.pro/reviews', mockNewReview)
       .reply(201, mockReviews);
 
     const store = mockStore();
