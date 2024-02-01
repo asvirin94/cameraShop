@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setCurrentPage } from '../../store/app-process/app-process.slice';
-import { getProducts } from '../../store/data-process/data-process.selectors';
 import {
   getFilterCategory,
   getFilterLevel,
@@ -22,11 +21,12 @@ import {
   getSortDirection,
 } from '../../store/sort-process/sort-process.selectors';
 import { useEffect, useState } from 'react';
+import { getFilteredAndSortedProducts } from '../../store/app-process/app-process.selectors';
 
 export default function Filter() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const products = useAppSelector(getProducts);
+  const filteredProducts = useAppSelector(getFilteredAndSortedProducts);
   const sortType = useAppSelector(getSortType);
   const sortDirection = useAppSelector(getSortDirection);
   const filterCategory = useAppSelector(getFilterCategory);
@@ -35,15 +35,19 @@ export default function Filter() {
   const minPrice = useAppSelector(getMinPrice);
   const maxPrice = useAppSelector(getMaxPrice);
 
+  const allProductsPrices = filteredProducts.map((product) => product.price);
+
   useEffect(() => {
     navigate(
       `/?page=1${sortType ? `&sortType=${sortType}` : ''}${
         sortDirection ? `&sortDirection=${sortDirection}` : ''
       }${filterCategory ? `&filterCategory=${filterCategory}` : ''}${
         filterType.length > 0 ? `&filterType=${filterType.join(',')}` : ''
-      }${filterlevel.length > 0 ? `&filterLevel=${filterlevel.join(',')}` : ''}${
-        minPrice ? `&minPrice=${minPrice}` : ''
-      }${maxPrice ? `&maxPrice=${maxPrice}` : ''}`
+      }${
+        filterlevel.length > 0 ? `&filterLevel=${filterlevel.join(',')}` : ''
+      }${minPrice ? `&minPrice=${minPrice}` : ''}${
+        maxPrice ? `&maxPrice=${maxPrice}` : ''
+      }`
     );
   }, [filterCategory, filterType, filterlevel, minPrice, maxPrice]);
 
@@ -56,28 +60,22 @@ export default function Filter() {
   }, [minPrice, maxPrice]);
 
   useEffect(() => {
-    if(componentMinPrice) {
-      const timer = setTimeout(() => dispatch(setMinPrice(componentMinPrice)), 1000);
+    const timer = setTimeout(
+      () => dispatch(setMinPrice(componentMinPrice)),
+      1000
+    );
 
-      return () => clearTimeout(timer);
-    } else {
-      const timer = setTimeout(() => dispatch(setMinPrice(undefined)), 1000);
-      return () => clearTimeout(timer);
-    }
+    return () => clearTimeout(timer);
   }, [componentMinPrice]);
 
   useEffect(() => {
-    if(componentMaxPrice) {
-      const timer = setTimeout(() => dispatch(setMaxPrice(componentMaxPrice)), 1000);
+    const timer = setTimeout(
+      () => dispatch(setMaxPrice(componentMaxPrice)),
+      1000
+    );
 
-      return () => clearTimeout(timer);
-    } else {
-      const timer = setTimeout(() => dispatch(setMaxPrice(undefined)), 1000);
-      return () => clearTimeout(timer);
-    }
+    return () => clearTimeout(timer);
   }, [componentMaxPrice]);
-
-  const allProductsPrices = products.map((product) => product.price);
 
   return (
     <div className="catalog__aside">
@@ -92,10 +90,14 @@ export default function Filter() {
                   <input
                     type="number"
                     name="price"
-                    placeholder={products.length > 0 ? `${Math.min(...allProductsPrices)}` : '0'}
+                    placeholder={
+                      filteredProducts.length > 0
+                        ? `${Math.min(...allProductsPrices)}`
+                        : '0'
+                    }
                     value={componentMinPrice}
                     onKeyDown={(e) => {
-                      if(e.key === '-') {
+                      if (e.key === '-') {
                         e.preventDefault();
                       }
                     }}
@@ -110,10 +112,14 @@ export default function Filter() {
                   <input
                     type="number"
                     name="priceUp"
-                    placeholder={products.length > 0 ? `${Math.max(...allProductsPrices)}` : '0'}
+                    placeholder={
+                      filteredProducts.length > 0
+                        ? `${Math.max(...allProductsPrices)}`
+                        : '0'
+                    }
                     value={componentMaxPrice}
                     onKeyDown={(e) => {
-                      if(e.key === '-') {
+                      if (e.key === '-') {
                         e.preventDefault();
                       }
                     }}
@@ -250,7 +256,11 @@ export default function Filter() {
               </label>
             </div>
           </fieldset>
-          <button className="btn catalog-filter__reset-btn" type="reset" onClick={() => dispatch(resetFilters())}>
+          <button
+            className="btn catalog-filter__reset-btn"
+            type="reset"
+            onClick={() => dispatch(resetFilters())}
+          >
             Сбросить фильтры
           </button>
         </form>
