@@ -36,7 +36,7 @@ export default function Filter() {
   const minPrice = useAppSelector(getMinPrice);
   const maxPrice = useAppSelector(getMaxPrice);
 
-  const allProductsPrices = filteredProducts.map((product) => product.price);
+  const filteredProductsPrices = filteredProducts.map((product) => product.price);
 
   useEffect(() => {
     navigate(
@@ -93,7 +93,7 @@ export default function Filter() {
                     name="price"
                     placeholder={
                       filteredProducts.length > 0
-                        ? `${Math.min(...allProductsPrices)}`
+                        ? `${Math.min(...filteredProductsPrices)}`
                         : '0'
                     }
                     value={componentMinPrice}
@@ -115,7 +115,7 @@ export default function Filter() {
                     name="priceUp"
                     placeholder={
                       filteredProducts.length > 0
-                        ? `${Math.max(...allProductsPrices)}`
+                        ? `${Math.max(...filteredProductsPrices)}`
                         : '0'
                     }
                     value={componentMaxPrice}
