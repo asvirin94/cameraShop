@@ -1,3 +1,4 @@
+import { useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setCurrentPage } from '../../store/app-process/app-process.slice';
@@ -24,6 +25,8 @@ import { useEffect, useState } from 'react';
 import { getCurrentPage, getFilteredAndSortedProducts } from '../../store/app-process/app-process.selectors';
 
 export default function Filter() {
+  const refInputMin = useRef<HTMLInputElement>(null);
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const filteredProducts = useAppSelector(getFilteredAndSortedProducts);
@@ -36,7 +39,15 @@ export default function Filter() {
   const minPrice = useAppSelector(getMinPrice);
   const maxPrice = useAppSelector(getMaxPrice);
 
+  useEffect(() => {
+    if(refInputMin && refInputMin.current && minPrice) {
+      refInputMin.current.value = String(minPrice);
+    }
+  }, [refInputMin, minPrice]);
+
   const filteredProductsPrices = filteredProducts.map((product) => product.price);
+  const minFilteredPrice = useMemo(() => Math.min(...filteredProductsPrices), [filteredProductsPrices]);
+  const maxFilteredPrice = useMemo(() => Math.max(...filteredProductsPrices), [filteredProductsPrices]);
 
   useEffect(() => {
     navigate(
@@ -52,31 +63,31 @@ export default function Filter() {
     );
   }, [page, filterCategory, filterType, filterlevel, minPrice, maxPrice]);
 
-  const [componentMinPrice, setComponentMinPrice] = useState<string>();
-  const [componentMaxPrice, setComponentMaxPrice] = useState<string>();
+  const [componentMaxPrice, setComponentMaxPrice] = useState<number>();
+
+  const handleBlurMin = function(e) {
+    if (filteredProductsPrices?.length) {
+      const { value } = e.target;
+      if (value.length && Number(value) !== minFilteredPrice) {
+        dispatch(setMinPrice(minFilteredPrice));
+      }
+
+    }
+  };
 
   useEffect(() => {
-    setComponentMinPrice(minPrice);
-    setComponentMaxPrice(maxPrice);
-  }, [minPrice, maxPrice]);
+    if (filteredProductsPrices?.length) {
+      if (refInputMin.current && Number(refInputMin.current?.value) < minFilteredPrice) {
+        dispatch(setMinPrice(minFilteredPrice));
+      }
+    }
+  }, [filteredProductsPrices]);
 
   useEffect(() => {
-    const timer = setTimeout(
-      () => dispatch(setMinPrice(componentMinPrice)),
-      1000
-    );
-
-    return () => clearTimeout(timer);
-  }, [componentMinPrice]);
-
-  useEffect(() => {
-    const timer = setTimeout(
-      () => dispatch(setMaxPrice(componentMaxPrice)),
-      1000
-    );
-
-    return () => clearTimeout(timer);
-  }, [componentMaxPrice]);
+    if (refInputMin?.current) {
+      refInputMin?.current.addEventListener('blur', handleBlurMin);
+    }
+  }, [refInputMin, filteredProducts]);
 
   return (
     <div className="catalog__aside">
@@ -89,6 +100,7 @@ export default function Filter() {
               <div className="custom-input">
                 <label>
                   <input
+                    ref={refInputMin}
                     type="number"
                     name="price"
                     placeholder={
@@ -96,14 +108,14 @@ export default function Filter() {
                         ? `${Math.min(...filteredProductsPrices)}`
                         : '0'
                     }
-                    value={componentMinPrice}
                     onKeyDown={(e) => {
                       if (e.key === '-') {
                         e.preventDefault();
                       }
                     }}
                     onChange={(e) => {
-                      setComponentMinPrice(e.target.value);
+                      dispatch(setMinPrice(+e.target.value));
+                      return e.target.value;
                     }}
                   />
                 </label>
@@ -125,7 +137,7 @@ export default function Filter() {
                       }
                     }}
                     onChange={(e) => {
-                      setComponentMaxPrice(e.target.value);
+                      setComponentMaxPrice(+e.target.value);
                     }}
                   />
                 </label>

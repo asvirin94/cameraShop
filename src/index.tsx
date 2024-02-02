@@ -47,16 +47,17 @@ if(filterLevel) {
 }
 
 if(minPrice) {
-  store.dispatch(setMinPrice(minPrice));
+  store.dispatch(setMinPrice(+minPrice));
 }
 
 if(maxPrice) {
-  store.dispatch(setMaxPrice(maxPrice));
+  store.dispatch(setMaxPrice(+maxPrice));
 }
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 
 root.render(
   <Provider store={store}>

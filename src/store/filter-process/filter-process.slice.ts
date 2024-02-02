@@ -6,8 +6,8 @@ type InitialState = {
   type: string[];
   level: string[];
   price: {
-    min: string | undefined;
-    max: string | undefined;
+    min: number | undefined;
+    max: number | undefined;
   };
 }
 
@@ -57,10 +57,10 @@ export const filterSlice = createSlice({
       state.price.min = undefined;
       state.price.max = undefined;
     },
-    setMinPrice: (state, action: PayloadAction<string | undefined>) => {
+    setMinPrice: (state, action: PayloadAction<number | undefined>) => {
       state.price.min = action.payload;
     },
-    setMaxPrice: (state, action: PayloadAction<string | undefined>) => {
+    setMaxPrice: (state, action: PayloadAction<number | undefined>) => {
       state.price.max = action.payload;
     }
   }

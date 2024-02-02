@@ -34,8 +34,8 @@ export const getFilteredProducts = (
   category: string | undefined,
   type: string[],
   level: string[],
-  minPrice: string | undefined,
-  maxPrice: string | undefined,
+  minPrice: number | undefined,
+  maxPrice: number | undefined,
   products: ProductType[]
 ) => {
   let result = products;
