@@ -7,10 +7,12 @@ import { useNavigate } from 'react-router-dom';
 import { setSortDirection, setSortType } from '../../store/sort-process/sort-process.slice';
 import { getFilterCategory, getFilterType, getFilterLevel, getMaxPrice, getMinPrice } from '../../store/filter-process/filter-process.selectors';
 import { useEffect } from 'react';
+import { getCurrentPage } from '../../store/app-process/app-process.selectors';
 
 export default function Sorts() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const page = useAppSelector(getCurrentPage);
   const sortType = useAppSelector(getSortType);
   const sortDirection = useAppSelector(getSortDirection);
   const filterCategory = useAppSelector(getFilterCategory);
@@ -21,7 +23,7 @@ export default function Sorts() {
 
   useEffect(() => {
     navigate(
-      `/?page=1${sortType ? `&sortType=${sortType}` : ''}${
+      `/?page=${page + 1}${sortType ? `&sortType=${sortType}` : ''}${
         sortDirection ? `&sortDirection=${sortDirection}` : ''
       }${filterCategory ? `&filterCategory=${filterCategory}` : ''}${
         filterType.length > 0 ? `&filterType=${filterType.join(',')}` : ''
@@ -29,7 +31,7 @@ export default function Sorts() {
         minPrice ? `&minPrice=${minPrice}` : ''
       }${maxPrice ? `&maxPrice=${maxPrice}` : ''}`
     );
-  }, [sortType, sortDirection]);
+  }, [page, sortType, sortDirection]);
 
   const sortDirectionHandler = (direction: string) => {
     if(!sortType) {

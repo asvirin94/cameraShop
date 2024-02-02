@@ -6,7 +6,7 @@ import Modal from '../../components/modal/modal';
 import PageContent from '../../components/page-content/page-content';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { setCurrentPage } from '../../store/app-process/app-process.slice';
 import { useAppDispatch } from '../../hooks';
 import { setSortDirection, setSortType } from '../../store/sort-process/sort-process.slice';
@@ -14,23 +14,22 @@ import { setCategory, setLevel, setMaxPrice, setMinPrice, setType } from '../../
 
 export default function StartPage() {
   const dispatch = useAppDispatch();
-  const [queryParams] = useSearchParams();
-  const page = queryParams.get('page');
-  const sortType = queryParams.get('sortType');
-  const sortDirection = queryParams.get('sortDirection');
-  const filterCategory = queryParams.get('filterCategory');
-  const filterType = queryParams.get('filterType');
-  const filterLevel = queryParams.get('filterLevel');
-  const minPrice = queryParams.get('minPrice');
-  const maxPrice = queryParams.get('maxPrice');
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const page = searchParams.get('page');
+  const sortType = searchParams.get('sortType');
+  const sortDirection = searchParams.get('sortDirection');
+  const filterCategory = searchParams.get('filterCategory');
+  const filterType = searchParams.get('filterType');
+  const filterLevel = searchParams.get('filterLevel');
+  const minPrice = searchParams.get('minPrice');
+  const maxPrice = searchParams.get('maxPrice');
 
   const isMounted = useRef(false);
 
   useEffect(() => {
     if(page) {
       dispatch(setCurrentPage(+page - 1));
-    } else {
-      dispatch(setCurrentPage(0));
     }
   }, []);
 
@@ -70,7 +69,6 @@ export default function StartPage() {
       dispatch(setMaxPrice(maxPrice));
     }
   }, []);
-
   return (
     <div className='wrapper'>
       <Helmet><title>Фотошоп</title></Helmet>

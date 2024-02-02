@@ -11,7 +11,6 @@ export default function App() {
       <Routes>
         <Route path={AppRoutes.Main}>
           <Route index element={<StartPage />} />
-          <Route path="/?page=:page" element={<StartPage />} />
           <Route
             path={`${AppRoutes.Product}:id/:tab`}
             element={<ProductPage />}

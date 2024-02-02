@@ -21,13 +21,14 @@ import {
   getSortDirection,
 } from '../../store/sort-process/sort-process.selectors';
 import { useEffect, useState } from 'react';
-import { getFilteredAndSortedProducts } from '../../store/app-process/app-process.selectors';
+import { getCurrentPage, getFilteredAndSortedProducts } from '../../store/app-process/app-process.selectors';
 
 export default function Filter() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const filteredProducts = useAppSelector(getFilteredAndSortedProducts);
   const sortType = useAppSelector(getSortType);
+  const page = useAppSelector(getCurrentPage);
   const sortDirection = useAppSelector(getSortDirection);
   const filterCategory = useAppSelector(getFilterCategory);
   const filterType = useAppSelector(getFilterType);
@@ -39,7 +40,7 @@ export default function Filter() {
 
   useEffect(() => {
     navigate(
-      `/?page=1${sortType ? `&sortType=${sortType}` : ''}${
+      `/?page=${page + 1}${sortType ? `&sortType=${sortType}` : ''}${
         sortDirection ? `&sortDirection=${sortDirection}` : ''
       }${filterCategory ? `&filterCategory=${filterCategory}` : ''}${
         filterType.length > 0 ? `&filterType=${filterType.join(',')}` : ''
@@ -49,7 +50,7 @@ export default function Filter() {
         maxPrice ? `&maxPrice=${maxPrice}` : ''
       }`
     );
-  }, [filterCategory, filterType, filterlevel, minPrice, maxPrice]);
+  }, [page, filterCategory, filterType, filterlevel, minPrice, maxPrice]);
 
   const [componentMinPrice, setComponentMinPrice] = useState<string>();
   const [componentMaxPrice, setComponentMaxPrice] = useState<string>();
