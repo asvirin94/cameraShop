@@ -25,7 +25,9 @@ export default function StartPage() {
   const minPrice = searchParams.get('minPrice');
   const maxPrice = searchParams.get('maxPrice');
 
-  const isMounted = useRef(false);
+  const test1 = useRef(false);
+  const test2 = useRef(false);
+  const test3 = useRef(false);
 
   useEffect(() => {
     if(page) {
@@ -41,22 +43,28 @@ export default function StartPage() {
   }, []);
 
   useEffect(() => {
-    if(isMounted.current) {
-      if(filterCategory) {
-        dispatch(setCategory(filterCategory));
-      }
-
-      if(filterType) {
-        const typesArr = filterType.split(',');
-        typesArr.forEach((type) => dispatch(setType(type)));
-      }
-
-      if(filterLevel) {
-        const levelsArr = filterLevel.split(',');
-        levelsArr.forEach((level) => dispatch(setLevel(level)));
-      }
+    if(filterCategory && test1.current) {
+      dispatch(setCategory(filterCategory));
     } else {
-      isMounted.current = true;
+      test1.current = true;
+    }
+  }, []);
+
+  useEffect(() => {
+    if(filterType) {
+      const typesArr = filterType.split(',');
+      typesArr.forEach((type) => dispatch(setType(type)));
+    } else {
+      test2.current = true;
+    }
+  }, []);
+
+  useEffect(() => {
+    if(filterLevel && test3.current) {
+      const levelsArr = filterLevel.split(',');
+      levelsArr.forEach((level) => dispatch(setLevel(level)));
+    } else {
+      test3.current = true;
     }
   }, []);
 

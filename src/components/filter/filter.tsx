@@ -50,7 +50,7 @@ export default function Filter() {
         maxPrice ? `&maxPrice=${maxPrice}` : ''
       }`
     );
-  }, [page, filterCategory, filterType, filterlevel, minPrice, maxPrice, sortDirection, sortType]);
+  }, [page, filterCategory, filterType, filterlevel, minPrice, maxPrice]);
 
   const [componentMinPrice, setComponentMinPrice] = useState<string>();
   const [componentMaxPrice, setComponentMaxPrice] = useState<string>();

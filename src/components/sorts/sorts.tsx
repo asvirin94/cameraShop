@@ -31,7 +31,7 @@ export default function Sorts() {
         minPrice ? `&minPrice=${minPrice}` : ''
       }${maxPrice ? `&maxPrice=${maxPrice}` : ''}`
     );
-  }, [page, filterCategory, filterType, filterlevel, minPrice, maxPrice, sortDirection, sortType]);
+  }, [page, sortDirection, sortType]);
 
   const sortDirectionHandler = (direction: string) => {
     if(!sortType) {
