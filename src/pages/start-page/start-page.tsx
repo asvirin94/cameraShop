@@ -32,7 +32,7 @@ export default function StartPage() {
     } else {
       dispatch(setCurrentPage(0));
     }
-  }, [page]);
+  }, []);
 
   useEffect(() => {
     if(sortDirection && sortType) {
@@ -59,7 +59,7 @@ export default function StartPage() {
     } else {
       isMounted.current = true;
     }
-  }, [filterCategory, filterType, filterLevel]);
+  }, []);
 
   useEffect(() => {
     if(minPrice) {
