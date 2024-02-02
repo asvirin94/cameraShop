@@ -43,7 +43,7 @@ export default function StartPage() {
   }, []);
 
   useEffect(() => {
-    if(filterCategory && test1.current) {
+    if(filterCategory) {
       dispatch(setCategory(filterCategory));
     } else {
       test1.current = true;
@@ -60,7 +60,7 @@ export default function StartPage() {
   }, []);
 
   useEffect(() => {
-    if(filterLevel && test3.current) {
+    if(filterLevel) {
       const levelsArr = filterLevel.split(',');
       levelsArr.forEach((level) => dispatch(setLevel(level)));
     } else {
