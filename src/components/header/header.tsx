@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import classNames from 'classnames';
 import { useEffect, useRef, useState } from 'react';
 import { getProducts } from '../../store/data-process/data-process.selectors';
@@ -6,6 +6,7 @@ import { useAppSelector } from '../../hooks';
 import { AppRoutes } from '../../consts';
 
 export default function Header() {
+  const navigate = useNavigate();
   const products = useAppSelector(getProducts);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
@@ -29,6 +30,22 @@ export default function Header() {
   const handleInputChange = () => {
     if (searchInputRef.current) {
       setSearchValue(searchInputRef.current.value);
+    }
+  };
+
+  const handleArrowNavigation = (event: React.KeyboardEvent<HTMLLIElement>, index: number) => {
+    const isArrowUp = event.key === 'ArrowUp';
+    const isArrowDown = event.key === 'ArrowDown';
+
+    if (listRef.current && (isArrowUp || isArrowDown)) {
+      const listItems = listRef.current.querySelectorAll('.form-search__select-item');
+
+      event.preventDefault();
+      const nextIndex = isArrowUp ? index - 1 : index + 1;
+
+      if (nextIndex >= 0 && nextIndex < listItems.length) {
+        (listItems[nextIndex] as HTMLElement).focus();
+      }
     }
   };
 
@@ -92,15 +109,21 @@ export default function Header() {
               />
             </label>
             <ul className="form-search__select-list" style={{}} ref={listRef}>
-              {relativeProducts.map((product) => (
-                <Link to={`/${AppRoutes.Product}${product.id}/description`} key={product.name}>
-                  <li
-                    className="form-search__select-item"
-                    tabIndex={0}
-                  >
-                    {product.name}
-                  </li>
-                </Link>
+              {relativeProducts.map((product, index) => (
+                <li
+                  key={product.name}
+                  className="form-search__select-item"
+                  tabIndex={0}
+                  onClick={() => navigate(`/${AppRoutes.Product}${product.id}/description`)}
+                  onKeyDown={(e) => {
+                    if(e.key === 'Enter') {
+                      navigate(`/${AppRoutes.Product}${product.id}/description`);
+                    }
+                    handleArrowNavigation(e, index);
+                  }}
+                >
+                  {product.name}
+                </li>
               ))}
             </ul>
           </form>

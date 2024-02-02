@@ -138,11 +138,17 @@ export default function Filter() {
                 <input
                   type="checkbox"
                   name="photocamera"
-                  onClick={() => {
+                  onChange={() => {
                     dispatch(setCategory('photo'));
                     dispatch(setCurrentPage(0));
                   }}
                   checked={filterCategory === 'photo'}
+                  onKeyDown={(e) => {
+                    if(e.key === 'Enter') {
+                      dispatch(setCategory('photo'));
+                      dispatch(setCurrentPage(0));
+                    }
+                  }}
                 />
                 <span className="custom-checkbox__icon"></span>
                 <span className="custom-checkbox__label">Фотокамера</span>
@@ -153,9 +159,15 @@ export default function Filter() {
                 <input
                   type="checkbox"
                   name="videocamera"
-                  onClick={() => {
+                  onChange={() => {
                     dispatch(setCategory('video'));
                     dispatch(setCurrentPage(0));
+                  }}
+                  onKeyDown={(e) => {
+                    if(e.key === 'Enter') {
+                      dispatch(setCategory('video'));
+                      dispatch(setCurrentPage(0));
+                    }
                   }}
                   checked={filterCategory === 'video'}
                 />
@@ -171,7 +183,12 @@ export default function Filter() {
                 <input
                   type="checkbox"
                   name="digital"
-                  onClick={() => dispatch(setType('digital'))}
+                  onChange={() => dispatch(setType('digital'))}
+                  onKeyDown={(e) => {
+                    if(e.key === 'Enter') {
+                      dispatch(setType('digital'));
+                    }
+                  }}
                   checked={filterType.includes('digital')}
                 />
                 <span className="custom-checkbox__icon"></span>
@@ -184,7 +201,12 @@ export default function Filter() {
                   type="checkbox"
                   name="film"
                   disabled={filterCategory === 'video'}
-                  onClick={() => dispatch(setType('film'))}
+                  onChange={() => dispatch(setType('film'))}
+                  onKeyDown={(e) => {
+                    if(e.key === 'Enter') {
+                      dispatch(setType('film'));
+                    }
+                  }}
                   checked={filterType.includes('film')}
                 />
                 <span className="custom-checkbox__icon"></span>
@@ -197,7 +219,12 @@ export default function Filter() {
                   type="checkbox"
                   name="snapshot"
                   disabled={filterCategory === 'video'}
-                  onClick={() => dispatch(setType('snapshot'))}
+                  onChange={() => dispatch(setType('snapshot'))}
+                  onKeyDown={(e) => {
+                    if(e.key === 'Enter') {
+                      dispatch(setType('snapshot'));
+                    }
+                  }}
                   checked={filterType.includes('snapshot')}
                 />
                 <span className="custom-checkbox__icon"></span>
@@ -209,7 +236,12 @@ export default function Filter() {
                 <input
                   type="checkbox"
                   name="collection"
-                  onClick={() => dispatch(setType('collection'))}
+                  onChange={() => dispatch(setType('collection'))}
+                  onKeyDown={(e) => {
+                    if(e.key === 'Enter') {
+                      dispatch(setType('collection'));
+                    }
+                  }}
                   checked={filterType.includes('collection')}
                 />
                 <span className="custom-checkbox__icon"></span>
@@ -224,7 +256,12 @@ export default function Filter() {
                 <input
                   type="checkbox"
                   name="zero"
-                  onClick={() => dispatch(setLevel('zero'))}
+                  onChange={() => dispatch(setLevel('zero'))}
+                  onKeyDown={(e) => {
+                    if(e.key === 'Enter') {
+                      dispatch(setLevel('zero'));
+                    }
+                  }}
                   checked={filterlevel.includes('zero')}
                 />
                 <span className="custom-checkbox__icon"></span>
@@ -236,7 +273,12 @@ export default function Filter() {
                 <input
                   type="checkbox"
                   name="non-professional"
-                  onClick={() => dispatch(setLevel('non-professional'))}
+                  onChange={() => dispatch(setLevel('non-professional'))}
+                  onKeyDown={(e) => {
+                    if(e.key === 'Enter') {
+                      dispatch(setLevel('non-professional'));
+                    }
+                  }}
                   checked={filterlevel.includes('non-professional')}
                 />
                 <span className="custom-checkbox__icon"></span>
@@ -248,7 +290,12 @@ export default function Filter() {
                 <input
                   type="checkbox"
                   name="professional"
-                  onClick={() => dispatch(setLevel('professional'))}
+                  onChange={() => dispatch(setLevel('professional'))}
+                  onKeyDown={(e) => {
+                    if(e.key === 'Enter') {
+                      dispatch(setLevel('professional'));
+                    }
+                  }}
                   checked={filterlevel.includes('professional')}
                 />
                 <span className="custom-checkbox__icon"></span>
@@ -260,6 +307,11 @@ export default function Filter() {
             className="btn catalog-filter__reset-btn"
             type="reset"
             onClick={() => dispatch(resetFilters())}
+            onKeyDown={(e) => {
+              if(e.key === 'Enter') {
+                dispatch(resetFilters());
+              }
+            }}
           >
             Сбросить фильтры
           </button>
