@@ -11,19 +11,20 @@ import { setCurrentPage } from '../../store/app-process/app-process.slice';
 import { useAppDispatch } from '../../hooks';
 import { setSortDirection, setSortType } from '../../store/sort-process/sort-process.slice';
 import { setCategory, setLevel, setMaxPrice, setMinPrice, setType } from '../../store/filter-process/filter-process.slice';
+import queryString from 'query-string';
 
 export default function StartPage() {
   const dispatch = useAppDispatch();
   const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const page = searchParams.get('page');
-  const sortType = searchParams.get('sortType');
-  const sortDirection = searchParams.get('sortDirection');
-  const filterCategory = searchParams.get('filterCategory');
-  const filterType = searchParams.get('filterType');
-  const filterLevel = searchParams.get('filterLevel');
-  const minPrice = searchParams.get('minPrice');
-  const maxPrice = searchParams.get('maxPrice');
+  const searchParams = queryString.parse(location.search);
+  const page = searchParams.page;
+  const sortType = searchParams.sortType;
+  const sortDirection = searchParams.sortDirection;
+  const filterCategory = searchParams.filterCategory;
+  const filterType = searchParams.filterType;
+  const filterLevel = searchParams.filterLevel;
+  const minPrice = searchParams.minPrice;
+  const maxPrice = searchParams.maxPrice;
 
   const isMounted = useRef(false);
 
@@ -36,7 +37,7 @@ export default function StartPage() {
   }, [page]);
 
   useEffect(() => {
-    if(sortDirection && sortType) {
+    if(typeof sortDirection === 'string' && typeof sortType === 'string') {
       dispatch(setSortDirection(sortDirection));
       dispatch(setSortType(sortType));
     }
@@ -44,16 +45,16 @@ export default function StartPage() {
 
   useEffect(() => {
     if(isMounted.current) {
-      if(filterCategory) {
+      if(typeof filterCategory === 'string') {
         dispatch(setCategory(filterCategory));
       }
 
-      if(filterType) {
+      if(typeof filterType === 'string') {
         const typesArr = filterType.split(',');
         typesArr.forEach((type) => dispatch(setType(type)));
       }
 
-      if(filterLevel) {
+      if(typeof filterLevel === 'string') {
         const levelsArr = filterLevel.split(',');
         levelsArr.forEach((level) => dispatch(setLevel(level)));
       }
@@ -63,11 +64,11 @@ export default function StartPage() {
   }, []);
 
   useEffect(() => {
-    if(minPrice) {
+    if(typeof minPrice === 'number') {
       dispatch(setMinPrice(minPrice));
     }
 
-    if(maxPrice) {
+    if(typeof maxPrice === 'number') {
       dispatch(setMaxPrice(maxPrice));
     }
   }, []);
