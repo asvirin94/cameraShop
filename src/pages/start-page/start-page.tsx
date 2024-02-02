@@ -6,25 +6,23 @@ import Modal from '../../components/modal/modal';
 import PageContent from '../../components/page-content/page-content';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { setCurrentPage } from '../../store/app-process/app-process.slice';
 import { useAppDispatch } from '../../hooks';
 import { setSortDirection, setSortType } from '../../store/sort-process/sort-process.slice';
 import { setCategory, setLevel, setMaxPrice, setMinPrice, setType } from '../../store/filter-process/filter-process.slice';
-import queryString from 'query-string';
 
 export default function StartPage() {
   const dispatch = useAppDispatch();
-  const location = useLocation();
-  const searchParams = queryString.parse(location.search);
-  const page = searchParams.page;
-  const sortType = searchParams.sortType;
-  const sortDirection = searchParams.sortDirection;
-  const filterCategory = searchParams.filterCategory;
-  const filterType = searchParams.filterType;
-  const filterLevel = searchParams.filterLevel;
-  const minPrice = searchParams.minPrice;
-  const maxPrice = searchParams.maxPrice;
+  const [queryParams] = useSearchParams();
+  const page = queryParams.get('page');
+  const sortType = queryParams.get('sortType');
+  const sortDirection = queryParams.get('sortDirection');
+  const filterCategory = queryParams.get('filterCategory');
+  const filterType = queryParams.get('filterType');
+  const filterLevel = queryParams.get('filterLevel');
+  const minPrice = queryParams.get('minPrice');
+  const maxPrice = queryParams.get('maxPrice');
 
   const isMounted = useRef(false);
 
@@ -37,7 +35,7 @@ export default function StartPage() {
   }, [page]);
 
   useEffect(() => {
-    if(typeof sortDirection === 'string' && typeof sortType === 'string') {
+    if(sortDirection && sortType) {
       dispatch(setSortDirection(sortDirection));
       dispatch(setSortType(sortType));
     }
@@ -45,16 +43,16 @@ export default function StartPage() {
 
   useEffect(() => {
     if(isMounted.current) {
-      if(typeof filterCategory === 'string') {
+      if(filterCategory) {
         dispatch(setCategory(filterCategory));
       }
 
-      if(typeof filterType === 'string') {
+      if(filterType) {
         const typesArr = filterType.split(',');
         typesArr.forEach((type) => dispatch(setType(type)));
       }
 
-      if(typeof filterLevel === 'string') {
+      if(filterLevel) {
         const levelsArr = filterLevel.split(',');
         levelsArr.forEach((level) => dispatch(setLevel(level)));
       }
@@ -64,15 +62,14 @@ export default function StartPage() {
   }, []);
 
   useEffect(() => {
-    if(typeof minPrice === 'number') {
+    if(minPrice) {
       dispatch(setMinPrice(minPrice));
     }
 
-    if(typeof maxPrice === 'number') {
+    if(maxPrice) {
       dispatch(setMaxPrice(maxPrice));
     }
   }, []);
-
   return (
     <div className='wrapper'>
       <Helmet><title>Фотошоп</title></Helmet>
