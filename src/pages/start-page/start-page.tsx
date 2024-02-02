@@ -5,7 +5,7 @@ import Header from '../../components/header/header';
 import Modal from '../../components/modal/modal';
 import PageContent from '../../components/page-content/page-content';
 import 'react-toastify/dist/ReactToastify.css';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { setCurrentPage } from '../../store/app-process/app-process.slice';
 import { useAppDispatch } from '../../hooks';
@@ -25,10 +25,6 @@ export default function StartPage() {
   const minPrice = searchParams.get('minPrice');
   const maxPrice = searchParams.get('maxPrice');
 
-  const test1 = useRef(false);
-  const test2 = useRef(false);
-  const test3 = useRef(false);
-
   useEffect(() => {
     if(page) {
       dispatch(setCurrentPage(+page - 1));
@@ -45,8 +41,6 @@ export default function StartPage() {
   useEffect(() => {
     if(filterCategory) {
       dispatch(setCategory(filterCategory));
-    } else {
-      test1.current = true;
     }
   }, []);
 
@@ -54,8 +48,6 @@ export default function StartPage() {
     if(filterType) {
       const typesArr = filterType.split(',');
       typesArr.forEach((type) => dispatch(setType(type)));
-    } else {
-      test2.current = true;
     }
   }, []);
 
@@ -63,8 +55,6 @@ export default function StartPage() {
     if(filterLevel) {
       const levelsArr = filterLevel.split(',');
       levelsArr.forEach((level) => dispatch(setLevel(level)));
-    } else {
-      test3.current = true;
     }
   }, []);
 
