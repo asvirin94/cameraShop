@@ -20,7 +20,7 @@ import {
   getSortType,
   getSortDirection,
 } from '../../store/sort-process/sort-process.selectors';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { getCurrentPage, getFilteredAndSortedProducts } from '../../store/app-process/app-process.selectors';
 
 export default function Filter() {
@@ -52,32 +52,6 @@ export default function Filter() {
     );
   }, [page, filterCategory, filterType, filterlevel, minPrice, maxPrice]);
 
-  const [componentMinPrice, setComponentMinPrice] = useState<string>();
-  const [componentMaxPrice, setComponentMaxPrice] = useState<string>();
-
-  useEffect(() => {
-    setComponentMinPrice(minPrice);
-    setComponentMaxPrice(maxPrice);
-  }, [minPrice, maxPrice]);
-
-  useEffect(() => {
-    const timer = setTimeout(
-      () => dispatch(setMinPrice(componentMinPrice)),
-      1000
-    );
-
-    return () => clearTimeout(timer);
-  }, [componentMinPrice]);
-
-  useEffect(() => {
-    const timer = setTimeout(
-      () => dispatch(setMaxPrice(componentMaxPrice)),
-      1000
-    );
-
-    return () => clearTimeout(timer);
-  }, [componentMaxPrice]);
-
   return (
     <div className="catalog__aside">
       <div className="catalog-filter">
@@ -96,14 +70,10 @@ export default function Filter() {
                         ? `${Math.min(...filteredProductsPrices)}`
                         : '0'
                     }
-                    value={componentMinPrice}
                     onKeyDown={(e) => {
                       if (e.key === '-') {
                         e.preventDefault();
                       }
-                    }}
-                    onChange={(e) => {
-                      setComponentMinPrice(e.target.value);
                     }}
                   />
                 </label>
@@ -118,14 +88,10 @@ export default function Filter() {
                         ? `${Math.max(...filteredProductsPrices)}`
                         : '0'
                     }
-                    value={componentMaxPrice}
                     onKeyDown={(e) => {
                       if (e.key === '-') {
                         e.preventDefault();
                       }
-                    }}
-                    onChange={(e) => {
-                      setComponentMaxPrice(e.target.value);
                     }}
                   />
                 </label>
