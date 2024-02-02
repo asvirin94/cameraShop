@@ -6,9 +6,53 @@ import { store } from './store';
 import { loadPromosAction, loadProductsAction } from './store/api-actions';
 import { ToastContainer } from 'react-toastify';
 import { BrowserRouter } from 'react-router-dom';
+import { setCurrentPage } from './store/app-process/app-process.slice';
+import { setSortDirection, setSortType } from './store/sort-process/sort-process.slice';
+import { setCategory, setType, setLevel, setMinPrice, setMaxPrice } from './store/filter-process/filter-process.slice';
 
 store.dispatch(loadProductsAction());
 store.dispatch(loadPromosAction());
+
+const searchParams = new URLSearchParams(location.search);
+const page = searchParams.get('page');
+const sortType = searchParams.get('sortType');
+const sortDirection = searchParams.get('sortDirection');
+const filterCategory = searchParams.get('filterCategory');
+const filterType = searchParams.get('filterType');
+const filterLevel = searchParams.get('filterLevel');
+const minPrice = searchParams.get('minPrice');
+const maxPrice = searchParams.get('maxPrice');
+
+if(page) {
+  store.dispatch(setCurrentPage(+page - 1));
+}
+
+if(sortDirection && sortType) {
+  store.dispatch(setSortDirection(sortDirection));
+  store.dispatch(setSortType(sortType));
+}
+
+if(filterCategory) {
+  store.dispatch(setCategory(filterCategory));
+}
+
+if(filterType) {
+  const typesArr = filterType.split(',');
+  typesArr.forEach((type) => store.dispatch(setType(type)));
+}
+
+if(filterLevel) {
+  const levelsArr = filterLevel.split(',');
+  levelsArr.forEach((level) => store.dispatch(setLevel(level)));
+}
+
+if(minPrice) {
+  store.dispatch(setMinPrice(minPrice));
+}
+
+if(maxPrice) {
+  store.dispatch(setMaxPrice(maxPrice));
+}
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
