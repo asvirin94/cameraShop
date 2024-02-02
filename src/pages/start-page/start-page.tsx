@@ -59,7 +59,7 @@ export default function StartPage() {
     } else {
       isMounted.current = true;
     }
-  }, []);
+  }, [filterCategory, filterType, filterLevel]);
 
   useEffect(() => {
     if(minPrice) {
@@ -70,6 +70,7 @@ export default function StartPage() {
       dispatch(setMaxPrice(maxPrice));
     }
   }, []);
+
   return (
     <div className='wrapper'>
       <Helmet><title>Фотошоп</title></Helmet>
