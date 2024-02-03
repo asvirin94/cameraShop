@@ -7,38 +7,17 @@ export const makeMachineDate = (date: string) =>
   dayjs(date).format('YYYY-MM-DD');
 export const makeHumanDate = (date: string) => dayjs(date).format('DD MMMM');
 
-export const getSortedProducts = (
-  sortType: string | undefined,
-  sortDirection: string | undefined,
-  products: ProductType[]
-) => {
-  if (sortType === undefined && sortDirection === undefined) {
-    return products;
-  }
-
-  switch (sortType) {
-    case 'price':
-      return sortDirection === 'fromLowToHigh'
-        ? [...products].sort((a, b) => a.price - b.price)
-        : [...products].sort((a, b) => b.price - a.price);
-    case 'popularity':
-      return sortDirection === 'fromLowToHigh'
-        ? [...products].sort((a, b) => a.rating - b.rating)
-        : [...products].sort((a, b) => b.rating - a.rating);
-    default:
-      return products;
-  }
-};
-
-export const getFilteredProducts = (
+export const makeFiltrationAndSorting = (
+  products: ProductType[],
   category: string | undefined,
   type: string[],
   level: string[],
-  minPrice: string | undefined,
-  maxPrice: string | undefined,
-  products: ProductType[]
+  minPrice?: string | undefined,
+  maxPrice?: string | undefined,
+  sortType?: string | undefined,
+  sortDirection?: string | undefined,
 ) => {
-  let result = products;
+  let result = [...products];
 
   const categoryTranslate =
     category === 'video' ? 'Видеокамера' : 'Фотоаппарат';
@@ -97,5 +76,20 @@ export const getFilteredProducts = (
     result = result.filter((product) => product.price <= +maxPrice);
   }
 
-  return result;
+  if (sortType === undefined && sortDirection === undefined) {
+    return result;
+  }
+
+  switch (sortType) {
+    case 'price':
+      return sortDirection === 'fromLowToHigh'
+        ? [...result].sort((a, b) => a.price - b.price)
+        : [...result].sort((a, b) => b.price - a.price);
+    case 'popularity':
+      return sortDirection === 'fromLowToHigh'
+        ? [...result].sort((a, b) => a.rating - b.rating)
+        : [...result].sort((a, b) => b.rating - a.rating);
+    default:
+      return result;
+  }
 };

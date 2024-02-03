@@ -29,11 +29,9 @@ export const filterSlice = createSlice({
       if(state.category === action.payload) {
         state.category = undefined;
         state.type = [];
-        state.level = [];
       } else {
         state.category = action.payload;
         state.type = [];
-        state.level = [];
       }
     },
     setType: (state, action: PayloadAction<string>) => {

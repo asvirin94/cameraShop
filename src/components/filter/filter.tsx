@@ -1,6 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setCurrentPage } from '../../store/app-process/app-process.slice';
+import {
+  setCurrentPage,
+  setFilteredAndSortedProducts,
+} from '../../store/app-process/app-process.slice';
 import {
   getFilterCategory,
   getFilterLevel,
@@ -20,13 +23,21 @@ import {
   getSortType,
   getSortDirection,
 } from '../../store/sort-process/sort-process.selectors';
-import { useEffect } from 'react';
-import { getCurrentPage, getFilteredAndSortedProducts } from '../../store/app-process/app-process.selectors';
+import { useEffect, useMemo, useRef } from 'react';
+import {
+  getCurrentPage, getFilteredAndSortedProducts,
+} from '../../store/app-process/app-process.selectors';
+import { getProducts } from '../../store/data-process/data-process.selectors';
+import { makeFiltrationAndSorting } from '../../utils';
+import { useDebouncedCallback } from 'use-debounce';
 
 export default function Filter() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const filteredProducts = useAppSelector(getFilteredAndSortedProducts);
+  const debouncedMaxPriceChange = useDebouncedCallback((e: string | undefined) => dispatch(setMaxPrice(e)), 1000);
+  const debouncedMinPriceChange = useDebouncedCallback((e: string | undefined) => dispatch(setMinPrice(e)), 1000);
+  const products = useAppSelector(getProducts);
+  const filteredAndSortedProducts = useAppSelector(getFilteredAndSortedProducts);
   const sortType = useAppSelector(getSortType);
   const page = useAppSelector(getCurrentPage);
   const sortDirection = useAppSelector(getSortDirection);
@@ -35,8 +46,6 @@ export default function Filter() {
   const filterlevel = useAppSelector(getFilterLevel);
   const minPrice = useAppSelector(getMinPrice);
   const maxPrice = useAppSelector(getMaxPrice);
-
-  const filteredProductsPrices = filteredProducts.map((product) => product.price);
 
   useEffect(() => {
     navigate(
@@ -52,6 +61,103 @@ export default function Filter() {
     );
   }, [page, filterCategory, filterType, filterlevel, minPrice, maxPrice]);
 
+  const filteredProducts = useMemo(
+    () =>
+      makeFiltrationAndSorting(
+        products,
+        filterCategory,
+        filterType,
+        filterlevel,
+        minPrice,
+        maxPrice,
+        sortType,
+        sortDirection,
+      ),
+    [filterCategory, filterType, filterlevel, minPrice, maxPrice, sortType, sortDirection, products]
+  );
+
+  const filteredPrices = useMemo(() => filteredAndSortedProducts.map((prod) => prod.price), [filteredAndSortedProducts]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    if (isMounted) {
+      dispatch(setFilteredAndSortedProducts(filteredProducts));
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, [filteredProducts]);
+
+  const minInputRef = useRef<HTMLInputElement>(null);
+  const maxInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if(minInputRef.current && minPrice) {
+      minInputRef.current.value = minPrice;
+    }
+    if(minInputRef.current && !minPrice) {
+      minInputRef.current.value = '';
+    }
+  }, [minPrice]);
+
+  useEffect(() => {
+    if(maxInputRef.current && maxPrice) {
+      if(!!minPrice && +minPrice > +maxPrice) {
+        maxInputRef.current.value = minPrice;
+        dispatch(setMaxPrice(minPrice));
+      } else {
+        maxInputRef.current.value = maxPrice;
+      }
+    }
+    if(maxInputRef.current && !maxPrice) {
+      maxInputRef.current.value = '';
+    }
+  }, [maxPrice, minPrice]);
+
+  useEffect(() => {
+    if(minInputRef.current && minInputRef.current.value.length) {
+      const filteredProductsWithoutPriceFilter = makeFiltrationAndSorting(products, filterCategory, filterType, filterlevel);
+      const filteredPricesWithoutPriceFilter = filteredProductsWithoutPriceFilter.map((prod) => prod.price);
+      const currentMinFilteredPrice = filteredPricesWithoutPriceFilter.length ? Math.min(...filteredPricesWithoutPriceFilter) : 0;
+
+      if(+minInputRef.current.value < currentMinFilteredPrice && !!minPrice) {
+        dispatch(setMinPrice(currentMinFilteredPrice.toString()));
+        minInputRef.current.value = currentMinFilteredPrice.toString();
+      }
+    }
+  }, [filteredAndSortedProducts, minInputRef.current?.value]);
+
+  useEffect(() => {
+    if(maxInputRef.current && maxInputRef.current.value.length) {
+      const filteredProductsWithoutPriceFilter = makeFiltrationAndSorting(products, filterCategory, filterType, filterlevel);
+      const filteredPricesWithoutPriceFilter = filteredProductsWithoutPriceFilter.map((prod) => prod.price);
+      const currentMaxFilteredPrice = filteredPricesWithoutPriceFilter.length ? Math.max(...filteredPricesWithoutPriceFilter) : Infinity;
+
+      if(+maxInputRef.current.value > currentMaxFilteredPrice && maxPrice) {
+        dispatch(setMaxPrice(currentMaxFilteredPrice.toString()));
+        maxInputRef.current.value = currentMaxFilteredPrice.toString();
+      }
+    }
+  }, [filteredAndSortedProducts]);
+
+  const handleMinPriceInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if(e.target.value.length) {
+      debouncedMinPriceChange(e.target.value);
+    } else{
+      debouncedMinPriceChange(undefined);
+    }
+  };
+
+  const handleMaxPriceInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if(e.target.value.length) {
+      debouncedMaxPriceChange(e.target.value);
+    } else {
+      debouncedMaxPriceChange(undefined);
+    }
+  };
+
   return (
     <div className="catalog__aside">
       <div className="catalog-filter">
@@ -65,16 +171,14 @@ export default function Filter() {
                   <input
                     type="number"
                     name="price"
-                    placeholder={
-                      filteredProducts.length > 0
-                        ? `${Math.min(...filteredProductsPrices)}`
-                        : '0'
-                    }
+                    placeholder={filteredAndSortedProducts.length ? Math.min(...filteredPrices).toString() : '0'}
                     onKeyDown={(e) => {
                       if (e.key === '-') {
                         e.preventDefault();
                       }
                     }}
+                    onChange={(e) => handleMinPriceInputChange(e)}
+                    ref={minInputRef}
                   />
                 </label>
               </div>
@@ -83,16 +187,14 @@ export default function Filter() {
                   <input
                     type="number"
                     name="priceUp"
-                    placeholder={
-                      filteredProducts.length > 0
-                        ? `${Math.max(...filteredProductsPrices)}`
-                        : '0'
-                    }
+                    placeholder={filteredAndSortedProducts.length ? Math.max(...filteredPrices).toString() : '0'}
                     onKeyDown={(e) => {
                       if (e.key === '-') {
                         e.preventDefault();
                       }
                     }}
+                    onChange={(e) => handleMaxPriceInputChange(e)}
+                    ref={maxInputRef}
                   />
                 </label>
               </div>
@@ -111,7 +213,7 @@ export default function Filter() {
                   }}
                   checked={filterCategory === 'photo'}
                   onKeyDown={(e) => {
-                    if(e.key === 'Enter') {
+                    if (e.key === 'Enter') {
                       dispatch(setCategory('photo'));
                       dispatch(setCurrentPage(0));
                     }
@@ -131,7 +233,7 @@ export default function Filter() {
                     dispatch(setCurrentPage(0));
                   }}
                   onKeyDown={(e) => {
-                    if(e.key === 'Enter') {
+                    if (e.key === 'Enter') {
                       dispatch(setCategory('video'));
                       dispatch(setCurrentPage(0));
                     }
@@ -152,7 +254,7 @@ export default function Filter() {
                   name="digital"
                   onChange={() => dispatch(setType('digital'))}
                   onKeyDown={(e) => {
-                    if(e.key === 'Enter') {
+                    if (e.key === 'Enter') {
                       dispatch(setType('digital'));
                     }
                   }}
@@ -170,7 +272,7 @@ export default function Filter() {
                   disabled={filterCategory === 'video'}
                   onChange={() => dispatch(setType('film'))}
                   onKeyDown={(e) => {
-                    if(e.key === 'Enter') {
+                    if (e.key === 'Enter') {
                       dispatch(setType('film'));
                     }
                   }}
@@ -188,7 +290,7 @@ export default function Filter() {
                   disabled={filterCategory === 'video'}
                   onChange={() => dispatch(setType('snapshot'))}
                   onKeyDown={(e) => {
-                    if(e.key === 'Enter') {
+                    if (e.key === 'Enter') {
                       dispatch(setType('snapshot'));
                     }
                   }}
@@ -205,7 +307,7 @@ export default function Filter() {
                   name="collection"
                   onChange={() => dispatch(setType('collection'))}
                   onKeyDown={(e) => {
-                    if(e.key === 'Enter') {
+                    if (e.key === 'Enter') {
                       dispatch(setType('collection'));
                     }
                   }}
@@ -225,7 +327,7 @@ export default function Filter() {
                   name="zero"
                   onChange={() => dispatch(setLevel('zero'))}
                   onKeyDown={(e) => {
-                    if(e.key === 'Enter') {
+                    if (e.key === 'Enter') {
                       dispatch(setLevel('zero'));
                     }
                   }}
@@ -242,7 +344,7 @@ export default function Filter() {
                   name="non-professional"
                   onChange={() => dispatch(setLevel('non-professional'))}
                   onKeyDown={(e) => {
-                    if(e.key === 'Enter') {
+                    if (e.key === 'Enter') {
                       dispatch(setLevel('non-professional'));
                     }
                   }}
@@ -259,7 +361,7 @@ export default function Filter() {
                   name="professional"
                   onChange={() => dispatch(setLevel('professional'))}
                   onKeyDown={(e) => {
-                    if(e.key === 'Enter') {
+                    if (e.key === 'Enter') {
                       dispatch(setLevel('professional'));
                     }
                   }}
@@ -275,7 +377,7 @@ export default function Filter() {
             type="reset"
             onClick={() => dispatch(resetFilters())}
             onKeyDown={(e) => {
-              if(e.key === 'Enter') {
+              if (e.key === 'Enter') {
                 dispatch(resetFilters());
               }
             }}
