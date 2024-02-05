@@ -19,3 +19,5 @@ export const AppRoutes = {
   Main: '/',
   Product: 'product/'
 } as const;
+
+export const DEBOUNCE_DELAY = 1000;

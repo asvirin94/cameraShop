@@ -30,12 +30,13 @@ import {
 import { getProducts } from '../../store/data-process/data-process.selectors';
 import { makeFiltrationAndSorting } from '../../utils';
 import { useDebouncedCallback } from 'use-debounce';
+import { DEBOUNCE_DELAY } from '../../consts';
 
 export default function Filter() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const debouncedMaxPriceChange = useDebouncedCallback((e: string | undefined) => dispatch(setMaxPrice(e)), 1000);
-  const debouncedMinPriceChange = useDebouncedCallback((e: string | undefined) => dispatch(setMinPrice(e)), 1000);
+  const debouncedMaxPriceChange = useDebouncedCallback((e: string | undefined) => dispatch(setMaxPrice(e)), DEBOUNCE_DELAY);
+  const debouncedMinPriceChange = useDebouncedCallback((e: string | undefined) => dispatch(setMinPrice(e)), DEBOUNCE_DELAY);
   const products = useAppSelector(getProducts);
   const filteredAndSortedProducts = useAppSelector(getFilteredAndSortedProducts);
   const sortType = useAppSelector(getSortType);
