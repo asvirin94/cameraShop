@@ -34,10 +34,10 @@ describe('Component: cards-list', () => {
   test('should return all products at one time if count less or equal than 9', () => {
 
     const initialState = {
-      [NameSpace.Data]: {...dataInitialState, products: mockProductsArray, isProductsLoaded: true},
-      [NameSpace.App]: {...appInitialState},
+      [NameSpace.Data]: {...dataInitialState, isProductsLoaded: true, products: mockProductsArray},
+      [NameSpace.App]: {...appInitialState, currentPage: 0, filteredAndSortedProducts: mockProductsArray},
       [NameSpace.Filter]: filterInitialState,
-      [NameSpace.Sort]: {...sortInitialState, sortType: 'price', sortDirection: 'fromLowToHigh'}
+      [NameSpace.Sort]: sortInitialState
     };
 
     const mockStore = configureMockStore();
@@ -49,13 +49,15 @@ describe('Component: cards-list', () => {
         </MemoryRouter>
       </Provider>
     );
+
     expect(container.getElementsByClassName('product-card').length).toBe(mockProductsArray.length);
   });
 
+
   test('should render correctly', () => {
     const initialState = {
-      [NameSpace.Data]: {...dataInitialState, products: mockProductsArray, isProductsLoaded: true},
-      [NameSpace.App]: appInitialState,
+      [NameSpace.Data]: {...dataInitialState, isProductsLoaded: true, products: mockProductsArray},
+      [NameSpace.App]: {...appInitialState, currentPage: 0, filteredAndSortedProducts: mockProductsArray},
       [NameSpace.Filter]: filterInitialState,
       [NameSpace.Sort]: sortInitialState
     };
