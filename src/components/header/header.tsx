@@ -49,6 +49,15 @@ export default function Header() {
     }
   };
 
+  const handleTest = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if(listRef.current && event.key === 'ArrowDown') {
+      const listItems = listRef.current.querySelectorAll('.form-search__select-item');
+
+      event.preventDefault();
+      (listItems[0] as HTMLElement).focus();
+    }
+  };
+
   return (
     <header className="header" id="header">
       <div className="container">
@@ -106,6 +115,7 @@ export default function Header() {
                 placeholder="Поиск по сайту"
                 ref={searchInputRef}
                 value={searchValue}
+                onKeyDown={(e) => handleTest(e)}
               />
             </label>
             <ul className="form-search__select-list" style={{}} ref={listRef}>
@@ -130,7 +140,10 @@ export default function Header() {
           <button
             className="form-search__reset"
             type="reset"
-            onClick={() => setSearchValue('')}
+            onClick={() => {
+              setSearchValue('');
+              searchInputRef.current?.focus();
+            }}
             style={{
               display: searchValue.length > 0 ? 'inline-block' : 'none',
             }}

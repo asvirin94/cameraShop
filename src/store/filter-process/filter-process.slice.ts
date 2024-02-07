@@ -28,10 +28,8 @@ export const filterSlice = createSlice({
     setCategory: (state, action: PayloadAction<string>) => {
       if(state.category === action.payload) {
         state.category = undefined;
-        state.type = [];
       } else {
         state.category = action.payload;
-        state.type = [];
       }
     },
     setType: (state, action: PayloadAction<string>) => {

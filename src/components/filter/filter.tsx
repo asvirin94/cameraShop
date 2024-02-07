@@ -230,11 +230,23 @@ export default function Filter() {
                   type="checkbox"
                   name="videocamera"
                   onChange={() => {
+                    if(filterType.includes('film')) {
+                      dispatch(setType('film'));
+                    }
+                    if(filterType.includes('snapshot')) {
+                      dispatch(setType('snapshot'));
+                    }
                     dispatch(setCategory('video'));
                     dispatch(setCurrentPage(0));
                   }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
+                      if(filterType.includes('film')) {
+                        dispatch(setType('film'));
+                      }
+                      if(filterType.includes('snapshot')) {
+                        dispatch(setType('snapshot'));
+                      }
                       dispatch(setCategory('video'));
                       dispatch(setCurrentPage(0));
                     }
