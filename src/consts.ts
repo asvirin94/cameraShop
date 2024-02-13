@@ -17,7 +17,8 @@ export const VISIBLE_REVIEWS_PER_CLICK = 3;
 
 export const AppRoutes = {
   Main: '/',
-  Product: 'product/'
+  Product: 'product/',
+  Basket: 'basket'
 } as const;
 
 export const DEBOUNCE_DELAY = 1000;
