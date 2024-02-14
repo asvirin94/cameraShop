@@ -12,12 +12,12 @@ import { sortInitialState } from '../../store/sort-process/sort-process.slice';
 const mockStore = configureMockStore();
 const initialState = {
   [NameSpace.Data]: dataInitialState,
-  [NameSpace.App]: {...appInitialState, isModalOpen: true, isModalAddToBusketOpen: true},
+  [NameSpace.App]: {...appInitialState, isModalOpen: true, isModalAddToBasketOpen: true},
   [NameSpace.Filter]: filterInitialState,
   [NameSpace.Sort]: sortInitialState
 };
 
-describe('Component: modal add to busket', () => {
+describe('Component: modal add to basket', () => {
   test('should render correctly', () => {
     render(
       <Provider store={mockStore(initialState)}>

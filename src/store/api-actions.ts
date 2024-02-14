@@ -17,7 +17,6 @@ export const loadProductsAction = createAsyncThunk<
     toast.warn('Не получилось загрузить данные :( Пожалуйста, попробуйте чуть позднее');
     throw error;
   }
-
 });
 
 export const loadPromosAction = createAsyncThunk<

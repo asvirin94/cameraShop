@@ -1,17 +1,19 @@
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { getIsModalAddReviewOpen, getIsModalAddToBusketOpen, getIsModalNewReviewSuccess, getIsModalOpen } from '../../store/app-process/app-process.selectors';
+import { getIsModalAddReviewOpen, getIsModalAddToBasketOpen, getIsModalAddToBasketSuccessOpen, getIsModalNewReviewSuccess, getIsModalOpen } from '../../store/app-process/app-process.selectors';
 import ModalAddReview from '../modal-add-review/modal-add-review';
-import ModalAddToBusket from '../modal-add-to-busket/modal-add-to-busket';
+import ModalAddToBasket from '../modal-add-to-basket/modal-add-to-basket';
 import { closeAllModal } from '../../store/app-process/app-process.slice';
 import ModalNewReviewSuccess from '../modal-new-review-success/modal-new-review-success';
+import ModalAddToBasketSuccess from '../modal-add-basket-success/modal-add-to-basket-success';
 
 export default function Modal() {
   const dispatch = useAppDispatch();
   const isModalOpen = useAppSelector(getIsModalOpen);
-  const isModalAddToBusketOpen = useAppSelector(getIsModalAddToBusketOpen);
+  const isModalAddToBasketOpen = useAppSelector(getIsModalAddToBasketOpen);
   const isModalAddReviewOpen = useAppSelector(getIsModalAddReviewOpen);
   const isModalNewReviewsSuccess = useAppSelector(getIsModalNewReviewSuccess);
+  const isModalAddToBasketSuccessOpen = useAppSelector(getIsModalAddToBasketSuccessOpen);
 
   useEffect(() => {
     if(isModalOpen) {
@@ -20,6 +22,9 @@ export default function Modal() {
       document.body.style.overflow = 'auto';
     }
 
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
   }, [isModalOpen]);
 
   const className = isModalOpen ? 'modal is-active' : 'modal';
@@ -29,10 +34,10 @@ export default function Modal() {
       <div className="modal__wrapper">
         <div className="modal__overlay" onClick={() => dispatch(closeAllModal())}></div>
         <div className="modal__content">
-          {isModalAddToBusketOpen && <ModalAddToBusket />}
+          {isModalAddToBasketOpen && <ModalAddToBasket />}
           {isModalAddReviewOpen && <ModalAddReview />}
           {isModalNewReviewsSuccess && <ModalNewReviewSuccess />}
-          {}
+          {isModalAddToBasketSuccessOpen && <ModalAddToBasketSuccess />}
         </div>
       </div>
     </div>

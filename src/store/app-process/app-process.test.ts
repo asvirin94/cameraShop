@@ -27,12 +27,12 @@ describe('testing app process', () => {
   });
 
   test('should set add to basket modal open', () => {
-    const action = appSlice.actions.setisModalAddToBusketOpen(true);
+    const action = appSlice.actions.setisModalAddToBasketOpen(true);
     const result = appSlice.reducer(appInitialState, action);
 
     const expectedState = {
       ...appInitialState,
-      isModalAddToBusketOpen: true
+      isModalAddToBasketOpen: true
     };
 
     expect(result).toEqual(expectedState);
@@ -56,7 +56,7 @@ describe('testing app process', () => {
 
     const expectedState = {
       ...appInitialState,
-      isModalAddToBusketOpen: false,
+      isModalAddToBasketOpen: false,
       isModalOpen: false,
       isModalAddReviewOpen: false
     };

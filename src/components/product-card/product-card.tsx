@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks';
-import { setproductToAdd, setModalIsOpen, setisModalAddToBusketOpen } from '../../store/app-process/app-process.slice';
+import { setproductToAdd, setModalIsOpen, setisModalAddToBasketOpen } from '../../store/app-process/app-process.slice';
 import { ProductType } from '../../types/types';
 import RatingStars from '../rating-stars/rating-stars';
 
@@ -50,7 +50,7 @@ export default function ProductCard(props: Props) {
           type="button"
           onClick={() => {
             dispatch(setModalIsOpen(true));
-            dispatch(setisModalAddToBusketOpen(true));
+            dispatch(setisModalAddToBasketOpen(true));
             dispatch(setproductToAdd(product));
           }}
         >

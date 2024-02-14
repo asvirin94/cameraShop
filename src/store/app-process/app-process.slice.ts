@@ -7,10 +7,13 @@ type InitialStateType = {
   productOnPage: ProductType | undefined;
   productToAdd: ProductType | undefined;
   isModalOpen: boolean;
-  isModalAddToBusketOpen: boolean;
+  isModalAddToBasketOpen: boolean;
   isModalAddReviewOpen: boolean;
   isModalNewReviewSuccessOpen: boolean;
+  isModalAddToBasketSuccessOpen: boolean;
   filteredAndSortedProducts: ProductType[];
+  productsInBasket: ProductType[];
+  productsInBusketPrice: number;
 };
 
 export const appInitialState: InitialStateType = {
@@ -18,10 +21,13 @@ export const appInitialState: InitialStateType = {
   productOnPage: undefined,
   productToAdd: undefined,
   isModalOpen: false,
-  isModalAddToBusketOpen: false,
+  isModalAddToBasketOpen: false,
   isModalAddReviewOpen: false,
   isModalNewReviewSuccessOpen: false,
-  filteredAndSortedProducts: []
+  isModalAddToBasketSuccessOpen: false,
+  filteredAndSortedProducts: [],
+  productsInBasket: [],
+  productsInBusketPrice: 0
 };
 
 export const appSlice = createSlice({
@@ -34,17 +40,18 @@ export const appSlice = createSlice({
     setModalIsOpen: (state, action: PayloadAction<boolean>) => {
       state.isModalOpen = action.payload;
     },
-    setisModalAddToBusketOpen: (state, action: PayloadAction<boolean>) => {
-      state.isModalAddToBusketOpen = action.payload;
+    setisModalAddToBasketOpen: (state, action: PayloadAction<boolean>) => {
+      state.isModalAddToBasketOpen = action.payload;
     },
     setIsModalAddReviewOpen: (state, action: PayloadAction<boolean>) => {
       state.isModalAddReviewOpen = action.payload;
     },
     closeAllModal: (state) => {
-      state.isModalAddToBusketOpen = false;
+      state.isModalAddToBasketOpen = false;
       state.isModalOpen = false;
       state.isModalAddReviewOpen = false;
       state.isModalNewReviewSuccessOpen = false;
+      state.isModalAddToBasketSuccessOpen = false;
     },
     setproductToAdd: (
       state,
@@ -64,8 +71,22 @@ export const appSlice = createSlice({
     ) => {
       state.isModalNewReviewSuccessOpen = action.payload;
     },
+    setisModalAddToBasketSuccessOpen: (state, action: PayloadAction<boolean>) => {
+      state.isModalAddToBasketSuccessOpen = action.payload;
+    },
     setFilteredAndSortedProducts: (state, action: PayloadAction<ProductType[]>) => {
       state.filteredAndSortedProducts = action.payload;
+    },
+    addProductToBasket: (state, action: PayloadAction<ProductType | undefined>) => {
+      if(action.payload && !state.productsInBasket.includes(action.payload)) {
+        state.productsInBasket.push(action.payload);
+      }
+    },
+    removeProductFromBasket: (state, action: PayloadAction<number>) => {
+      state.productsInBasket = state.productsInBasket.filter((product) => product.id !== action.payload);
+    },
+    changeTotalPrice: (state, action: PayloadAction<number>) => {
+      state.productsInBusketPrice = state.productsInBusketPrice + action.payload;
     }
   },
 });
@@ -73,11 +94,15 @@ export const appSlice = createSlice({
 export const {
   setCurrentPage,
   setModalIsOpen,
-  setisModalAddToBusketOpen,
+  setisModalAddToBasketOpen,
   closeAllModal,
   setproductToAdd,
   setIsModalAddReviewOpen,
   setProductOnPage,
   setIsModalNewReviewSuccessOpen,
-  setFilteredAndSortedProducts
+  setFilteredAndSortedProducts,
+  setisModalAddToBasketSuccessOpen,
+  addProductToBasket,
+  removeProductFromBasket,
+  changeTotalPrice
 } = appSlice.actions;

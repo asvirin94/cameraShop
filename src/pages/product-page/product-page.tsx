@@ -5,7 +5,7 @@ import {
   closeAllModal,
   setModalIsOpen,
   setProductOnPage,
-  setisModalAddToBusketOpen,
+  setisModalAddToBasketOpen,
   setproductToAdd,
 } from '../../store/app-process/app-process.slice';
 import Modal from '../../components/modal/modal';
@@ -135,7 +135,7 @@ export default function ProductPage() {
                         type="button"
                         onClick={() => {
                           dispatch(setModalIsOpen(true));
-                          dispatch(setisModalAddToBusketOpen(true));
+                          dispatch(setisModalAddToBasketOpen(true));
                           dispatch(setproductToAdd(product));
                         }}
                       >

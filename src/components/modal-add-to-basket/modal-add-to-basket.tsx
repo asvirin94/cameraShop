@@ -1,8 +1,8 @@
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getProductToAdd } from '../../store/app-process/app-process.selectors';
-import { closeAllModal } from '../../store/app-process/app-process.slice';
+import { addProductToBasket, closeAllModal, setisModalAddToBasketOpen, setisModalAddToBasketSuccessOpen } from '../../store/app-process/app-process.slice';
 
-export default function ModalAddToBusket() {
+export default function ModalAddToBasket() {
   const dispatch = useAppDispatch();
   const product = useAppSelector(getProductToAdd);
 
@@ -44,6 +44,11 @@ export default function ModalAddToBusket() {
         <button
           className="btn btn--purple modal__btn modal__btn--fit-width"
           type="button"
+          onClick={() => {
+            dispatch(addProductToBasket(product));
+            dispatch(setisModalAddToBasketOpen(false));
+            dispatch(setisModalAddToBasketSuccessOpen(true));
+          }}
         >
           <svg width="24" height="16" aria-hidden="true">
             <use xlinkHref="#icon-add-basket"></use>
