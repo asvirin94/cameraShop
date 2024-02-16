@@ -13,7 +13,6 @@ type InitialStateType = {
   isModalAddToBasketSuccessOpen: boolean;
   filteredAndSortedProducts: ProductType[];
   productsInBasketData: ProductInBasket[];
-  productsInBusketPrice: number;
 };
 
 export const appInitialState: InitialStateType = {
@@ -27,7 +26,6 @@ export const appInitialState: InitialStateType = {
   isModalAddToBasketSuccessOpen: false,
   filteredAndSortedProducts: [],
   productsInBasketData: [],
-  productsInBusketPrice: 0
 };
 
 export const appSlice = createSlice({
@@ -77,9 +75,6 @@ export const appSlice = createSlice({
     setFilteredAndSortedProducts: (state, action: PayloadAction<ProductType[]>) => {
       state.filteredAndSortedProducts = action.payload;
     },
-    changeTotalPrice: (state, action: PayloadAction<number>) => {
-      state.productsInBusketPrice = state.productsInBusketPrice + action.payload;
-    },
     addProductInBasketData: (state, action: PayloadAction<ProductInBasket>) => {
       state.productsInBasketData.push(action.payload);
     },
@@ -101,7 +96,6 @@ export const {
   setIsModalNewReviewSuccessOpen,
   setFilteredAndSortedProducts,
   setisModalAddToBasketSuccessOpen,
-  changeTotalPrice,
   addProductInBasketData,
   chandeProductInBasketCount
 } = appSlice.actions;
