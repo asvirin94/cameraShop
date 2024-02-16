@@ -21,7 +21,7 @@ export default function BasketItem({product}: Props) {
       dispatch(changeTotalPrice(-product.price * countValue));
       isMount = false;
     };
-  });
+  }, []);
 
   return(
     <li className="basket-item" key={product.id}>
