@@ -8,6 +8,7 @@ type Props = {
 
 export default function BuyButton({product}: Props) {
   const dispatch = useAppDispatch();
+
   return (
     <button
       className="btn btn--purple product-card__btn"

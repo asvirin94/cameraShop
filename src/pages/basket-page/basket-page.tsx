@@ -2,12 +2,22 @@ import { Helmet } from 'react-helmet-async';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import { useAppSelector } from '../../hooks';
-import { getProductsInBasket, getProductsInBasketPrice } from '../../store/app-process/app-process.selectors';
+import { getProductsInBasketData } from '../../store/app-process/app-process.selectors';
+import { getProducts } from '../../store/data-process/data-process.selectors';
 import BasketItem from '../../components/basket-item/basket-item';
+import { ProductType } from '../../types/types';
 
 export default function BasketPage() {
-  const productsInBasket = useAppSelector(getProductsInBasket);
-  const totalPrice = useAppSelector(getProductsInBasketPrice);
+  const products = useAppSelector(getProducts);
+  const basketData = useAppSelector(getProductsInBasketData);
+  const totalPrice = basketData.reduce((sum, item) => {
+    const product = products.find((p) => p.id === item.id);
+    if(product) {
+      return sum + product.price * item.count;
+    } else {
+      return sum;
+    }
+  }, 0);
 
   return (
     <>
@@ -47,9 +57,11 @@ export default function BasketPage() {
               <div className="container">
                 <h1 className="title title--h2">Корзина</h1>
                 <ul className="basket__list">
-                  {productsInBasket.map((product) => (
-                    <BasketItem product={product} key={product.id}/>
-                  ))}
+                  {basketData.map((item) => {
+                    const product = products.find((p) => p.id === item.id) as ProductType;
+
+                    return <BasketItem product={product} key={product.id}/>;
+                  })}
                 </ul>
                 <div className="basket__summary">
                   <div className="basket__promo">

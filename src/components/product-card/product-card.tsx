@@ -3,18 +3,16 @@ import { ProductType } from '../../types/types';
 import RatingStars from '../rating-stars/rating-stars';
 import BuyButton from '../buy-button/buy-button';
 import { useAppSelector } from '../../hooks';
-import { getProductsInBasket } from '../../store/app-process/app-process.selectors';
+import { getProductsInBasketData } from '../../store/app-process/app-process.selectors';
 import ToBasketButton from '../to-basket-button/to-basket-button';
 
 type Props = {
   product: ProductType;
 }
 
-export default function ProductCard(props: Props) {
-  const {product} = props;
-  const productsInBasket = useAppSelector(getProductsInBasket);
-
-  const productsInBasketIds = productsInBasket.map((item) => item.id);
+export default function ProductCard({product}: Props) {
+  const basketData = useAppSelector(getProductsInBasketData);
+  const isProductAlreadyInBasket = basketData.some((item) => product && item.id === product.id);
 
   return (
     <div className="product-card">
@@ -49,7 +47,7 @@ export default function ProductCard(props: Props) {
         </p>
       </div>
       <div className="product-card__buttons">
-        {productsInBasketIds.includes(product.id) ? <ToBasketButton/> : <BuyButton product={product} />}
+        {isProductAlreadyInBasket ? <ToBasketButton /> : <BuyButton product={product} />}
         <Link className="btn btn--transparent" to={`/product/${product.id}/description`} onClick={() => window.scrollTo({top: 0})}>Подробнее </Link>
       </div>
     </div>

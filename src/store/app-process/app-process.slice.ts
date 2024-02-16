@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../../consts';
-import { ProductType } from '../../types/types';
+import { ProductInBasket, ProductType } from '../../types/types';
 
 type InitialStateType = {
   currentPage: number;
@@ -12,7 +12,7 @@ type InitialStateType = {
   isModalNewReviewSuccessOpen: boolean;
   isModalAddToBasketSuccessOpen: boolean;
   filteredAndSortedProducts: ProductType[];
-  productsInBasket: ProductType[];
+  productsInBasketData: ProductInBasket[];
   productsInBusketPrice: number;
 };
 
@@ -26,7 +26,7 @@ export const appInitialState: InitialStateType = {
   isModalNewReviewSuccessOpen: false,
   isModalAddToBasketSuccessOpen: false,
   filteredAndSortedProducts: [],
-  productsInBasket: [],
+  productsInBasketData: [],
   productsInBusketPrice: 0
 };
 
@@ -77,16 +77,15 @@ export const appSlice = createSlice({
     setFilteredAndSortedProducts: (state, action: PayloadAction<ProductType[]>) => {
       state.filteredAndSortedProducts = action.payload;
     },
-    addProductToBasket: (state, action: PayloadAction<ProductType | undefined>) => {
-      if(action.payload && !state.productsInBasket.includes(action.payload)) {
-        state.productsInBasket.push(action.payload);
-      }
-    },
-    removeProductFromBasket: (state, action: PayloadAction<number>) => {
-      state.productsInBasket = state.productsInBasket.filter((product) => product.id !== action.payload);
-    },
     changeTotalPrice: (state, action: PayloadAction<number>) => {
       state.productsInBusketPrice = state.productsInBusketPrice + action.payload;
+    },
+    addProductInBasketData: (state, action: PayloadAction<ProductInBasket>) => {
+      state.productsInBasketData.push(action.payload);
+    },
+    chandeProductInBasketCount: (state, action: PayloadAction<ProductInBasket>) => {
+      const productDataToChangeIndex = state.productsInBasketData.findIndex((item) => item.id === action.payload.id);
+      state.productsInBasketData[productDataToChangeIndex].count = state.productsInBasketData[productDataToChangeIndex].count + action.payload.count;
     }
   },
 });
@@ -102,7 +101,7 @@ export const {
   setIsModalNewReviewSuccessOpen,
   setFilteredAndSortedProducts,
   setisModalAddToBasketSuccessOpen,
-  addProductToBasket,
-  removeProductFromBasket,
-  changeTotalPrice
+  changeTotalPrice,
+  addProductInBasketData,
+  chandeProductInBasketCount
 } = appSlice.actions;

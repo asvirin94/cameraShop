@@ -1,10 +1,22 @@
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { getProductToAdd } from '../../store/app-process/app-process.selectors';
-import { addProductToBasket, closeAllModal, setisModalAddToBasketOpen, setisModalAddToBasketSuccessOpen } from '../../store/app-process/app-process.slice';
+import { getProductToAdd, getProductsInBasketData } from '../../store/app-process/app-process.selectors';
+import { addProductInBasketData, chandeProductInBasketCount, closeAllModal, setisModalAddToBasketOpen, setisModalAddToBasketSuccessOpen } from '../../store/app-process/app-process.slice';
 
 export default function ModalAddToBasket() {
   const dispatch = useAppDispatch();
   const product = useAppSelector(getProductToAdd);
+  const basketData = useAppSelector(getProductsInBasketData);
+  const isProductAlreadyInBasket = basketData.some((item) => product && item.id === product.id);
+
+  const addToBasketClickHandler = () => {
+    if(product) {
+      if(isProductAlreadyInBasket) {
+        dispatch(chandeProductInBasketCount({id: product.id, count: 1}));
+      } else {
+        dispatch(addProductInBasketData({id: product.id, count: 1}));
+      }
+    }
+  };
 
   return (
     <>
@@ -45,9 +57,9 @@ export default function ModalAddToBasket() {
           className="btn btn--purple modal__btn modal__btn--fit-width"
           type="button"
           onClick={() => {
-            dispatch(addProductToBasket(product));
             dispatch(setisModalAddToBasketOpen(false));
             dispatch(setisModalAddToBasketSuccessOpen(true));
+            addToBasketClickHandler();
           }}
         >
           <svg width="24" height="16" aria-hidden="true">

@@ -51,3 +51,8 @@ export type NewReview = {
   review: string;
   rating: number | undefined;
 }
+
+export type ProductInBasket = {
+  id: number;
+  count: number;
+}
