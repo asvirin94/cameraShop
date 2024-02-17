@@ -11,4 +11,3 @@ export const getproductOnPage = (state: StateType) => state[NameSpace.App].produ
 export const getFilteredAndSortedProducts = (state: StateType) => state[NameSpace.App].filteredAndSortedProducts;
 export const getIsModalAddToBasketSuccessOpen = (state: StateType) => state[NameSpace.App].isModalAddToBasketSuccessOpen;
 export const getProductsInBasketData = (state: StateType) => state[NameSpace.App].productsInBasketData;
-export const getProductsInBasketPrice = (state: StateType) => state[NameSpace.App].productsInBusketPrice;

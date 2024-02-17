@@ -6,12 +6,19 @@ import { store } from './store';
 import { loadPromosAction, loadProductsAction } from './store/api-actions';
 import { ToastContainer } from 'react-toastify';
 import { BrowserRouter } from 'react-router-dom';
-import { setCurrentPage } from './store/app-process/app-process.slice';
+import { addProductInBasketData, setCurrentPage } from './store/app-process/app-process.slice';
 import { setSortDirection, setSortType } from './store/sort-process/sort-process.slice';
 import { setCategory, setType, setLevel, setMinPrice, setMaxPrice } from './store/filter-process/filter-process.slice';
+import { ProductInBasket } from './types/types';
 
 store.dispatch(loadProductsAction());
 store.dispatch(loadPromosAction());
+
+const productsInBasketString = localStorage.getItem('basketData');
+if(productsInBasketString) {
+  const productsInBasket = JSON.parse(productsInBasketString) as ProductInBasket[];
+  productsInBasket.forEach((product) => store.dispatch(addProductInBasketData(product)));
+}
 
 const searchParams = new URLSearchParams(location.search);
 const page = searchParams.get('page');

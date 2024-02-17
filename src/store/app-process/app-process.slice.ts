@@ -81,6 +81,13 @@ export const appSlice = createSlice({
     chandeProductInBasketCount: (state, action: PayloadAction<ProductInBasket>) => {
       const productDataToChangeIndex = state.productsInBasketData.findIndex((item) => item.id === action.payload.id);
       state.productsInBasketData[productDataToChangeIndex].count = state.productsInBasketData[productDataToChangeIndex].count + action.payload.count;
+    },
+    setProductInBasketCount: (state, action: PayloadAction<ProductInBasket>) => {
+      const productDataToChangeIndex = state.productsInBasketData.findIndex((item) => item.id === action.payload.id);
+      state.productsInBasketData[productDataToChangeIndex].count = action.payload.count;
+    },
+    removeProductFromBasket: (state, action: PayloadAction<number>) => {
+      state.productsInBasketData = state.productsInBasketData.filter((product) => product.id !== action.payload);
     }
   },
 });
@@ -97,5 +104,7 @@ export const {
   setFilteredAndSortedProducts,
   setisModalAddToBasketSuccessOpen,
   addProductInBasketData,
-  chandeProductInBasketCount
+  chandeProductInBasketCount,
+  setProductInBasketCount,
+  removeProductFromBasket
 } = appSlice.actions;

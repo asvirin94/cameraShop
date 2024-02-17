@@ -10,6 +10,7 @@ import { ProductType } from '../../types/types';
 export default function BasketPage() {
   const products = useAppSelector(getProducts);
   const basketData = useAppSelector(getProductsInBasketData);
+
   const totalPrice = basketData.reduce((sum, item) => {
     const product = products.find((p) => p.id === item.id);
     if(product) {
@@ -59,7 +60,6 @@ export default function BasketPage() {
                 <ul className="basket__list">
                   {basketData.map((item) => {
                     const product = products.find((p) => p.id === item.id) as ProductType;
-
                     return <BasketItem product={product} key={product.id}/>;
                   })}
                 </ul>

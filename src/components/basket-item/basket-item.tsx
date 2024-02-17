@@ -1,6 +1,7 @@
+import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getProductsInBasketData } from '../../store/app-process/app-process.selectors';
-import { chandeProductInBasketCount } from '../../store/app-process/app-process.slice';
+import { chandeProductInBasketCount, removeProductFromBasket, setProductInBasketCount } from '../../store/app-process/app-process.slice';
 import { ProductInBasket, ProductType } from '../../types/types';
 
 type Props = {
@@ -11,6 +12,10 @@ export default function BasketItem({product}: Props) {
   const dispatch = useAppDispatch();
   const basketData = useAppSelector(getProductsInBasketData);
   const productInBasketData = basketData.find((item) => item.id === product.id) as ProductInBasket;
+
+  useEffect(() => {
+    localStorage.setItem('basketData', JSON.stringify(basketData));
+  }, [basketData]);
 
   return(
     <li className="basket-item" key={product.id}>
@@ -54,6 +59,7 @@ export default function BasketItem({product}: Props) {
           className="btn-icon btn-icon--prev"
           aria-label="уменьшить количество товара"
           onClick={() => dispatch(chandeProductInBasketCount({id: product.id, count: -1}))}
+          disabled={productInBasketData.count === 1}
         >
           <svg width="7" height="12" aria-hidden="true">
             <use xlinkHref="#icon-arrow"></use>
@@ -69,11 +75,22 @@ export default function BasketItem({product}: Props) {
           id="counter1"
           aria-label="количество товара"
           value={productInBasketData.count}
+          onChange={(e) => {
+            if(+e.target.value > 0 && +e.target.value < 100) {
+              dispatch(setProductInBasketCount({id: product.id, count: +e.target.value}));
+            }
+            if(+e.target.value > 99) {
+              dispatch(setProductInBasketCount({id: product.id, count: 99}));
+            }
+          }}
         />
         <button
           className="btn-icon btn-icon--next"
           aria-label="увеличить количество товара"
-          onClick={() => dispatch(chandeProductInBasketCount({id: product.id, count: 1}))}
+          onClick={() => {
+            dispatch(chandeProductInBasketCount({id: product.id, count: 1}));
+          }}
+          disabled={productInBasketData.count === 99}
         >
           <svg width="7" height="12" aria-hidden="true">
             <use xlinkHref="#icon-arrow"></use>
@@ -87,6 +104,7 @@ export default function BasketItem({product}: Props) {
         className="cross-btn"
         type="button"
         aria-label="Удалить товар"
+        onClick={() => dispatch(removeProductFromBasket(productInBasketData.id))}
       >
         <svg width="10" height="10" aria-hidden="true">
           <use xlinkHref="#icon-close"></use>
