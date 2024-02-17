@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { getProducts } from '../../store/data-process/data-process.selectors';
 import { useAppSelector } from '../../hooks';
 import { AppRoutes } from '../../consts';
+import BasketCounter from '../basket-counter/basket-counter';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -155,10 +156,11 @@ export default function Header() {
           </button>
         </div>
 
-        <a className="header__basket-link" onClick={() => navigate(`/${AppRoutes.Basket}`)}>
+        <a className="header__basket-link" onClick={() => navigate(`/${AppRoutes.Basket}`)} style={{cursor: 'pointer'}}>
           <svg width="16" height="16" aria-hidden="true">
             <use xlinkHref="#icon-basket"></use>
           </svg>
+          <BasketCounter />
         </a>
       </div>
     </header>

@@ -1,11 +1,13 @@
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { closeAllModal } from '../../store/app-process/app-process.slice';
 import { AppRoutes } from '../../consts';
+import { getCurrentPage } from '../../store/app-process/app-process.selectors';
 
 export default function ModalAddToBasketSuccess() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const page = useAppSelector(getCurrentPage);
 
   return (
     <>
@@ -14,7 +16,11 @@ export default function ModalAddToBasketSuccess() {
         <use xlinkHref="#icon-success"></use>
       </svg>
       <div className="modal__buttons">
-        <a className="btn btn--transparent modal__btn" onClick={() => dispatch(closeAllModal())}>
+        <a className="btn btn--transparent modal__btn" onClick={() => {
+          dispatch(closeAllModal());
+          navigate(`/?page=${page + 1}`);
+        }}
+        >
           Продолжить покупки
         </a>
         <button className="btn btn--purple modal__btn modal__btn--fit-width" onClick={() => {
