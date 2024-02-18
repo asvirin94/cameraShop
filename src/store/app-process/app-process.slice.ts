@@ -77,17 +77,21 @@ export const appSlice = createSlice({
     },
     addProductInBasketData: (state, action: PayloadAction<ProductInBasket>) => {
       state.productsInBasketData.push(action.payload);
+      localStorage.setItem('basketData', JSON.stringify(state.productsInBasketData));
     },
     chandeProductInBasketCount: (state, action: PayloadAction<ProductInBasket>) => {
       const productDataToChangeIndex = state.productsInBasketData.findIndex((item) => item.id === action.payload.id);
       state.productsInBasketData[productDataToChangeIndex].count = state.productsInBasketData[productDataToChangeIndex].count + action.payload.count;
+      localStorage.setItem('basketData', JSON.stringify(state.productsInBasketData));
     },
     setProductInBasketCount: (state, action: PayloadAction<ProductInBasket>) => {
       const productDataToChangeIndex = state.productsInBasketData.findIndex((item) => item.id === action.payload.id);
       state.productsInBasketData[productDataToChangeIndex].count = action.payload.count;
+      localStorage.setItem('basketData', JSON.stringify(state.productsInBasketData));
     },
     removeProductFromBasket: (state, action: PayloadAction<number>) => {
       state.productsInBasketData = state.productsInBasketData.filter((product) => product.id !== action.payload);
+      localStorage.setItem('basketData', JSON.stringify(state.productsInBasketData));
     }
   },
 });

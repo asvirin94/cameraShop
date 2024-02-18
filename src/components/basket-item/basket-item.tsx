@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getProductsInBasketData } from '../../store/app-process/app-process.selectors';
 import { chandeProductInBasketCount, removeProductFromBasket, setProductInBasketCount } from '../../store/app-process/app-process.slice';
@@ -12,10 +11,6 @@ export default function BasketItem({product}: Props) {
   const dispatch = useAppDispatch();
   const basketData = useAppSelector(getProductsInBasketData);
   const productInBasketData = basketData.find((item) => item.id === product.id) as ProductInBasket;
-
-  useEffect(() => {
-    localStorage.setItem('basketData', JSON.stringify(basketData));
-  }, [basketData]);
 
   return(
     <li className="basket-item" key={product.id}>

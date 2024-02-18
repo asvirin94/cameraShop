@@ -17,7 +17,9 @@ store.dispatch(loadPromosAction());
 const productsInBasketString = localStorage.getItem('basketData');
 if(productsInBasketString) {
   const productsInBasket = JSON.parse(productsInBasketString) as ProductInBasket[];
-  productsInBasket.forEach((product) => store.dispatch(addProductInBasketData(product)));
+  productsInBasket.forEach((product) => {
+    store.dispatch(addProductInBasketData(product));
+  });
 }
 
 const searchParams = new URLSearchParams(location.search);

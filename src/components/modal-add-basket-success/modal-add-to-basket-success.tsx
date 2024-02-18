@@ -2,18 +2,12 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { closeAllModal } from '../../store/app-process/app-process.slice';
 import { AppRoutes } from '../../consts';
-import { getCurrentPage, getProductsInBasketData } from '../../store/app-process/app-process.selectors';
-import { useEffect } from 'react';
+import { getCurrentPage } from '../../store/app-process/app-process.selectors';
 
 export default function ModalAddToBasketSuccess() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const page = useAppSelector(getCurrentPage);
-  const basketData = useAppSelector(getProductsInBasketData);
-
-  useEffect(() => {
-    localStorage.setItem('basketData', JSON.stringify(basketData));
-  }, []);
 
   return (
     <>
