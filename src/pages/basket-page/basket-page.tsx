@@ -199,7 +199,7 @@ export default function BasketPage() {
                         type="submit"
                         disabled={!basketData.length}
                         onClick={() => {
-                          void dispatch(
+                          dispatch(
                             sendOrderAction({
                               camerasIds: productsInBasketIds,
                               coupon: promoCode,
