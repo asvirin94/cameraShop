@@ -22,3 +22,5 @@ export const AppRoutes = {
 } as const;
 
 export const DEBOUNCE_DELAY = 1000;
+
+export const DISCOUNT_VALUE = 0.15;

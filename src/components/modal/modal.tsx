@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { getIsModalAddReviewOpen, getIsModalAddToBasketOpen, getIsModalAddToBasketSuccessOpen, getIsModalNewReviewSuccess, getIsModalOpen } from '../../store/app-process/app-process.selectors';
+import { getIsModalAddReviewOpen, getIsModalAddToBasketOpen, getIsModalAddToBasketSuccessOpen, getIsModalNewReviewSuccess, getIsModalOpen, getIsModalOrderSendOpen } from '../../store/app-process/app-process.selectors';
 import ModalAddReview from '../modal-add-review/modal-add-review';
 import ModalAddToBasket from '../modal-add-to-basket/modal-add-to-basket';
 import { closeAllModal } from '../../store/app-process/app-process.slice';
 import ModalNewReviewSuccess from '../modal-new-review-success/modal-new-review-success';
 import ModalAddToBasketSuccess from '../modal-add-basket-success/modal-add-to-basket-success';
+import ModalSuccessBuy from '../modal-success-buy/modal-success-buy';
 
 export default function Modal() {
   const dispatch = useAppDispatch();
@@ -14,6 +15,7 @@ export default function Modal() {
   const isModalAddReviewOpen = useAppSelector(getIsModalAddReviewOpen);
   const isModalNewReviewsSuccess = useAppSelector(getIsModalNewReviewSuccess);
   const isModalAddToBasketSuccessOpen = useAppSelector(getIsModalAddToBasketSuccessOpen);
+  const isModalOrderSendOpen = useAppSelector(getIsModalOrderSendOpen);
 
   useEffect(() => {
     if(isModalOpen) {
@@ -38,6 +40,7 @@ export default function Modal() {
           {isModalAddReviewOpen && <ModalAddReview />}
           {isModalNewReviewsSuccess && <ModalNewReviewSuccess />}
           {isModalAddToBasketSuccessOpen && <ModalAddToBasketSuccess />}
+          {isModalOrderSendOpen && <ModalSuccessBuy />}
         </div>
       </div>
     </div>

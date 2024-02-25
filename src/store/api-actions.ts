@@ -1,7 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { Id, NewReview, ProductType, Promos, Review } from '../types/types';
+import { AppDispatch, Id, NewReview, Order, ProductType, Promos, Review } from '../types/types';
 import { AxiosInstance } from 'axios';
 import { toast } from 'react-toastify';
+import { clearBasket } from './app-process/app-process.slice';
+import { setIsOrderSend } from './data-process/data-process.slice';
 
 export const loadProductsAction = createAsyncThunk<
   ProductType[],
@@ -59,4 +61,21 @@ export const sendNewReviewAction = createAsyncThunk<
   }
 >('sendNewReview', async (review: NewReview, {extra: api}) => {
   await api.post('reviews', review);
+});
+
+export const sendOrderAction = createAsyncThunk<
+  void,
+  Order,
+  {
+    extra: AxiosInstance;
+    dispatch: AppDispatch;
+  }
+>('sendOrder', async(order: Order, {extra: api, dispatch}) => {
+  try {
+    await api.post('orders', order);
+    dispatch(setIsOrderSend(true));
+    dispatch(clearBasket());
+  } catch (error) {
+    dispatch(setIsOrderSend(false));
+  }
 });

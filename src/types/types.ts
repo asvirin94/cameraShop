@@ -56,3 +56,8 @@ export type ProductInBasket = {
   id: number;
   count: number;
 }
+
+export type Order = {
+  camerasIds: number[];
+  coupon: string | null;
+}

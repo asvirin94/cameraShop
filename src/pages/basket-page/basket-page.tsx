@@ -1,26 +1,66 @@
 import { Helmet } from 'react-helmet-async';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
-import { useAppSelector } from '../../hooks';
-import { getProductsInBasketData } from '../../store/app-process/app-process.selectors';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import {
+  getIsPromoCodeApplied,
+  getProductsInBasketData,
+  getPromoCode,
+} from '../../store/app-process/app-process.selectors';
 import { getProducts } from '../../store/data-process/data-process.selectors';
 import BasketItem from '../../components/basket-item/basket-item';
 import { ProductType } from '../../types/types';
+import { useRef, useState } from 'react';
+import { checkIsPromoCodeCorrect, setIsModalOrderOpen, setModalIsOpen } from '../../store/app-process/app-process.slice';
+import classNames from 'classnames';
+import { DISCOUNT_VALUE } from '../../consts';
+import { sendOrderAction } from '../../store/api-actions';
+import Modal from '../../components/modal/modal';
 
 export default function BasketPage() {
+  const dispatch = useAppDispatch();
   const products = useAppSelector(getProducts);
   const basketData = useAppSelector(getProductsInBasketData);
+  const isPromoApplied = useAppSelector(getIsPromoCodeApplied);
+  const promoCode = useAppSelector(getPromoCode);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [isPromoApplyAttempted, setIsPromoApplyAttempted] = useState(false);
 
   const totalPrice = basketData.reduce((sum, item) => {
     const product = products.find((p) => p.id === item.id);
-    if(product) {
+    if (product) {
       return sum + product.price * item.count;
     } else {
       return sum;
     }
   }, 0);
 
-  if(products.length) {
+  const discount = totalPrice * DISCOUNT_VALUE;
+
+  const productsInBasketIds = basketData.map((p) => p.id);
+
+  const applyPromoHandler = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsPromoApplyAttempted(true);
+    if (inputRef.current && inputRef.current.value.length) {
+      dispatch(checkIsPromoCodeCorrect(inputRef.current.value));
+      inputRef.current.value = '';
+    }
+  };
+
+  const getSnowflakeElement = () => {
+    if (isPromoApplyAttempted && isPromoApplied === null) {
+      return (
+        <svg width="9" height="9" aria-hidden="true">
+          <use xlinkHref="#icon-snowflake"></use>
+        </svg>
+      );
+    } else {
+      return null;
+    }
+  };
+
+  if (products.length) {
     return (
       <>
         <Helmet title="Корзина"></Helmet>
@@ -60,8 +100,10 @@ export default function BasketPage() {
                   <h1 className="title title--h2">Корзина</h1>
                   <ul className="basket__list">
                     {basketData.map((item) => {
-                      const product = products.find((p) => p.id === item.id) as ProductType;
-                      return <BasketItem product={product} key={product.id}/>;
+                      const product = products.find(
+                        (p) => p.id === item.id
+                      ) as ProductType;
+                      return <BasketItem product={product} key={product.id} />;
                     })}
                   </ul>
                   <div className="basket__summary">
@@ -72,15 +114,36 @@ export default function BasketPage() {
                       </p>
                       <div className="basket-form">
                         <form action="#">
-                          <div className="custom-input">
+                          <div
+                            className={classNames('custom-input', {
+                              'is-valid': isPromoApplied,
+                              'is-invalid': isPromoApplied === false,
+                            })}
+                          >
                             <label>
                               <span className="custom-input__label">
                                 Промокод
+                                {getSnowflakeElement()}
                               </span>
                               <input
                                 type="text"
                                 name="promo"
                                 placeholder="Введите промокод"
+                                ref={inputRef}
+                                onKeyDown={(e) => {
+                                  if (e.key === ' ') {
+                                    e.preventDefault();
+                                  }
+                                }}
+                                onChange={(e) => {
+                                  const newValue = e.target.value.replace(
+                                    /\s/g,
+                                    ''
+                                  );
+                                  if (inputRef.current) {
+                                    inputRef.current.value = newValue;
+                                  }
+                                }}
                               />
                             </label>
                             <p className="custom-input__error">
@@ -90,7 +153,11 @@ export default function BasketPage() {
                               Промокод принят!
                             </p>
                           </div>
-                          <button className="btn" type="submit">
+                          <button
+                            className="btn"
+                            type="submit"
+                            onClick={applyPromoHandler}
+                          >
                             Применить
                           </button>
                         </form>
@@ -99,12 +166,21 @@ export default function BasketPage() {
                     <div className="basket__summary-order">
                       <p className="basket__summary-item">
                         <span className="basket__summary-text">Всего:</span>
-                        <span className="basket__summary-value">{totalPrice.toLocaleString('ru-RU')} ₽</span>
+                        <span className="basket__summary-value">
+                          {totalPrice.toLocaleString('ru-RU')} ₽
+                        </span>
                       </p>
                       <p className="basket__summary-item">
                         <span className="basket__summary-text">Скидка:</span>
-                        <span className="basket__summary-value basket__summary-value--bonus">
-                          0 ₽
+                        <span
+                          className={classNames('basket__summary-value', {
+                            'basket__summary-value--bonus': isPromoApplied,
+                          })}
+                        >
+                          {isPromoApplied
+                            ? discount.toLocaleString('ru-RU')
+                            : 0}{' '}
+                          ₽
                         </span>
                       </p>
                       <p className="basket__summary-item">
@@ -112,10 +188,29 @@ export default function BasketPage() {
                           К оплате:
                         </span>
                         <span className="basket__summary-value basket__summary-value--total">
-                          {totalPrice.toLocaleString('ru-RU')} ₽
+                          {isPromoApplied
+                            ? (totalPrice - discount).toLocaleString('ru-RU')
+                            : totalPrice.toLocaleString('ru-RU')}{' '}
+                          ₽
                         </span>
                       </p>
-                      <button className="btn btn--purple" type="submit">
+                      <button
+                        className="btn btn--purple"
+                        type="submit"
+                        disabled={!basketData.length}
+                        onClick={() => {
+                          void dispatch(
+                            sendOrderAction({
+                              camerasIds: productsInBasketIds,
+                              coupon: promoCode,
+                            })
+                          )
+                            .then(() => {
+                              dispatch(setModalIsOpen(true));
+                              dispatch(setIsModalOrderOpen(true));
+                            });
+                        }}
+                      >
                         Оформить заказ
                       </button>
                     </div>
@@ -123,15 +218,13 @@ export default function BasketPage() {
                 </div>
               </section>
             </div>
+            <Modal />
           </main>
           <Footer />
         </div>
       </>
     );
   } else {
-    return (
-      <div>Loading...</div>
-    );
+    return <div>Loading...</div>;
   }
-
 }

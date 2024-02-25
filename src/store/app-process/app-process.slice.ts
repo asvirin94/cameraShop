@@ -11,8 +11,12 @@ type InitialStateType = {
   isModalAddReviewOpen: boolean;
   isModalNewReviewSuccessOpen: boolean;
   isModalAddToBasketSuccessOpen: boolean;
+  isModalOrderSendOpen: boolean;
   filteredAndSortedProducts: ProductType[];
   productsInBasketData: ProductInBasket[];
+  promoCodes: string[];
+  promoCode: string | null;
+  isPromoCodeApplied: boolean | null;
 };
 
 export const appInitialState: InitialStateType = {
@@ -24,8 +28,12 @@ export const appInitialState: InitialStateType = {
   isModalAddReviewOpen: false,
   isModalNewReviewSuccessOpen: false,
   isModalAddToBasketSuccessOpen: false,
+  isModalOrderSendOpen: false,
   filteredAndSortedProducts: [],
   productsInBasketData: [],
+  promoCodes: ['camera-333', 'camera-444', 'camera-555'],
+  promoCode: null,
+  isPromoCodeApplied: null
 };
 
 export const appSlice = createSlice({
@@ -50,6 +58,7 @@ export const appSlice = createSlice({
       state.isModalAddReviewOpen = false;
       state.isModalNewReviewSuccessOpen = false;
       state.isModalAddToBasketSuccessOpen = false;
+      state.isModalOrderSendOpen = false;
     },
     setproductToAdd: (
       state,
@@ -72,6 +81,9 @@ export const appSlice = createSlice({
     setisModalAddToBasketSuccessOpen: (state, action: PayloadAction<boolean>) => {
       state.isModalAddToBasketSuccessOpen = action.payload;
     },
+    setIsModalOrderOpen: (state, action: PayloadAction<boolean>) => {
+      state.isModalOrderSendOpen = action.payload;
+    },
     setFilteredAndSortedProducts: (state, action: PayloadAction<ProductType[]>) => {
       state.filteredAndSortedProducts = action.payload;
     },
@@ -92,6 +104,18 @@ export const appSlice = createSlice({
     removeProductFromBasket: (state, action: PayloadAction<number>) => {
       state.productsInBasketData = state.productsInBasketData.filter((product) => product.id !== action.payload);
       localStorage.setItem('basketData', JSON.stringify(state.productsInBasketData));
+    },
+    checkIsPromoCodeCorrect: (state, action: PayloadAction<string>) => {
+      if(state.promoCodes.includes(action.payload)) {
+        state.isPromoCodeApplied = true;
+        state.promoCode = action.payload;
+      } else {
+        state.isPromoCodeApplied = false;
+      }
+    },
+    clearBasket: (state) => {
+      state.productsInBasketData = [];
+      localStorage.removeItem('basketData');
     }
   },
 });
@@ -110,5 +134,8 @@ export const {
   addProductInBasketData,
   chandeProductInBasketCount,
   setProductInBasketCount,
-  removeProductFromBasket
+  removeProductFromBasket,
+  checkIsPromoCodeCorrect,
+  setIsModalOrderOpen,
+  clearBasket
 } = appSlice.actions;

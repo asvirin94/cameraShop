@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { ProductType, Promos, Review } from '../../types/types';
 import { NameSpace } from '../../consts';
 import { loadProductsAction, loadPromosAction, loadReviewsAction, loadSimilarProductsAction } from '../api-actions';
@@ -9,6 +9,8 @@ type InitialStateType = {
   similarProducts: ProductType[];
   reviews: Review[];
   isProductsLoaded: boolean;
+  isOrderSend: boolean | null;
+  errorMessage: string | null;
 }
 
 export const dataInitialState: InitialStateType = {
@@ -16,13 +18,22 @@ export const dataInitialState: InitialStateType = {
   promos: [],
   similarProducts: [],
   reviews: [],
-  isProductsLoaded: false
+  isProductsLoaded: false,
+  isOrderSend: null,
+  errorMessage: null
 };
 
 export const dataSlice = createSlice({
   name: NameSpace.Data,
   initialState: dataInitialState,
-  reducers: {},
+  reducers: {
+    setIsOrderSend: (state, action: PayloadAction<boolean>) => {
+      state.isOrderSend = action.payload;
+      if(!action.payload) {
+        state.errorMessage = 'Что-то пошло не так...';
+      }
+    }
+  },
   extraReducers(builder) {
     builder
       .addCase(loadProductsAction.pending, (state) => {
@@ -43,3 +54,5 @@ export const dataSlice = createSlice({
       });
   },
 });
+
+export const {setIsOrderSend} = dataSlice.actions;
