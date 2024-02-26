@@ -121,4 +121,16 @@ describe('testing app process', () => {
 
     expect(result).toEqual(expectedState);
   });
+
+  test('should set removing item', () => {
+    const action = appSlice.actions.setRemovingItemId(1);
+    const result = appSlice.reducer(appInitialState, action);
+
+    const expectedState = {
+      ...appInitialState,
+      removingItemId: 1
+    };
+
+    expect(result).toEqual(expectedState);
+  });
 });
