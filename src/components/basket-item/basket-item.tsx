@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getProductsInBasketData } from '../../store/app-process/app-process.selectors';
-import { chandeProductInBasketCount, removeProductFromBasket, setProductInBasketCount } from '../../store/app-process/app-process.slice';
+import { chandeProductInBasketCount, setIsModalRemoveItemOpen, setModalIsOpen, setProductInBasketCount, setRemovingItemId } from '../../store/app-process/app-process.slice';
 import { ProductInBasket, ProductType } from '../../types/types';
 
 type Props = {
@@ -99,7 +99,11 @@ export default function BasketItem({product}: Props) {
         className="cross-btn"
         type="button"
         aria-label="Удалить товар"
-        onClick={() => dispatch(removeProductFromBasket(productInBasketData.id))}
+        onClick={() => {
+          dispatch(setRemovingItemId(productInBasketData.id));
+          dispatch(setModalIsOpen(true));
+          dispatch(setIsModalRemoveItemOpen(true));
+        }}
       >
         <svg width="10" height="10" aria-hidden="true">
           <use xlinkHref="#icon-close"></use>

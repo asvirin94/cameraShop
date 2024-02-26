@@ -14,3 +14,5 @@ export const getProductsInBasketData = (state: StateType) => state[NameSpace.App
 export const getIsPromoCodeApplied = (state: StateType) => state[NameSpace.App].isPromoCodeApplied;
 export const getPromoCode = (state: StateType) => state[NameSpace.App].promoCode;
 export const getIsModalOrderSendOpen = (state: StateType) => state[NameSpace.App].isModalOrderSendOpen;
+export const getIsModalRemoveItemOpen = (state: StateType) => state[NameSpace.App].isModalRemoveItemOpen;
+export const getRemovingItemId = (state: StateType) => state[NameSpace.App].removingItemId;

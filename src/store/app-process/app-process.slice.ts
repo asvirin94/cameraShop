@@ -12,11 +12,13 @@ type InitialStateType = {
   isModalNewReviewSuccessOpen: boolean;
   isModalAddToBasketSuccessOpen: boolean;
   isModalOrderSendOpen: boolean;
+  isModalRemoveItemOpen: boolean;
   filteredAndSortedProducts: ProductType[];
   productsInBasketData: ProductInBasket[];
   promoCodes: string[];
   promoCode: string | null;
   isPromoCodeApplied: boolean | null;
+  removingItemId: number | null;
 };
 
 export const appInitialState: InitialStateType = {
@@ -26,6 +28,7 @@ export const appInitialState: InitialStateType = {
   isModalOpen: false,
   isModalAddToBasketOpen: false,
   isModalAddReviewOpen: false,
+  isModalRemoveItemOpen: false,
   isModalNewReviewSuccessOpen: false,
   isModalAddToBasketSuccessOpen: false,
   isModalOrderSendOpen: false,
@@ -33,7 +36,8 @@ export const appInitialState: InitialStateType = {
   productsInBasketData: [],
   promoCodes: ['camera-333', 'camera-444', 'camera-555'],
   promoCode: null,
-  isPromoCodeApplied: null
+  isPromoCodeApplied: null,
+  removingItemId: null
 };
 
 export const appSlice = createSlice({
@@ -59,6 +63,8 @@ export const appSlice = createSlice({
       state.isModalNewReviewSuccessOpen = false;
       state.isModalAddToBasketSuccessOpen = false;
       state.isModalOrderSendOpen = false;
+      state.isModalRemoveItemOpen = false;
+      state.removingItemId = null;
     },
     setproductToAdd: (
       state,
@@ -116,6 +122,12 @@ export const appSlice = createSlice({
     clearBasket: (state) => {
       state.productsInBasketData = [];
       localStorage.removeItem('basketData');
+    },
+    setIsModalRemoveItemOpen: (state, action: PayloadAction<boolean>) => {
+      state.isModalRemoveItemOpen = action.payload;
+    },
+    setRemovingItemId: (state, action: PayloadAction<number| null>) => {
+      state.removingItemId = action.payload;
     }
   },
 });
@@ -136,6 +148,8 @@ export const {
   setProductInBasketCount,
   removeProductFromBasket,
   checkIsPromoCodeCorrect,
+  setIsModalRemoveItemOpen,
   setIsModalOrderOpen,
-  clearBasket
+  clearBasket,
+  setRemovingItemId
 } = appSlice.actions;
