@@ -71,11 +71,19 @@ export default function BasketItem({product}: Props) {
           aria-label="количество товара"
           value={productInBasketData.count}
           onChange={(e) => {
+            if(!e.target.value.length || +e.target.value <= 0) {
+              dispatch(setProductInBasketCount({id: product.id, count: 1}));
+            }
             if(+e.target.value > 0 && +e.target.value < 100) {
               dispatch(setProductInBasketCount({id: product.id, count: +e.target.value}));
             }
             if(+e.target.value > 99) {
               dispatch(setProductInBasketCount({id: product.id, count: 99}));
+            }
+          }}
+          onKeyDown={(e) => {
+            if(e.key === '.' || e.key === ',') {
+              e.preventDefault();
             }
           }}
         />
@@ -93,7 +101,7 @@ export default function BasketItem({product}: Props) {
         </button>
       </div>
       <div className="basket-item__total-price">
-        <span className="visually-hidden">Общая цена:</span>{(product.price * productInBasketData.count).toLocaleString('ru-RU')} ₽
+        <span className="visually-hidden">Общая цена:</span>{(product.price * productInBasketData.count).toLocaleString('ru-RU')}&#8239;₽
       </div>
       <button
         className="cross-btn"

@@ -20,6 +20,25 @@ export default function Modal() {
   const isModalRemoveItemOpen = useAppSelector(getIsModalRemoveItemOpen);
 
   useEffect(() => {
+    const handleEscKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isModalOpen) {
+        event.preventDefault();
+        dispatch(closeAllModal());
+      }
+    };
+
+    document.addEventListener('keydown', handleEscKey);
+
+    return () => {
+      document.removeEventListener('keydown', handleEscKey);
+      const activeElement = document.activeElement as HTMLElement | null;
+      if(activeElement) {
+        activeElement.blur();
+      }
+    };
+  }, [isModalOpen]);
+
+  useEffect(() => {
     if(isModalOpen) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -32,9 +51,10 @@ export default function Modal() {
   }, [isModalOpen]);
 
   const className = isModalOpen ? 'modal is-active' : 'modal';
+  const classNameIsNarrow = isModalAddToBasketSuccessOpen ? 'modal--narrow' : '';
 
   return (
-    <div className={className}>
+    <div className={`${className} ${classNameIsNarrow}`}>
       <div className="modal__wrapper">
         <div className="modal__overlay" onClick={() => dispatch(closeAllModal())}></div>
         <div className="modal__content">

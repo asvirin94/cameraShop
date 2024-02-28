@@ -11,7 +11,7 @@ import { getProducts } from '../../store/data-process/data-process.selectors';
 import BasketItem from '../../components/basket-item/basket-item';
 import { ProductType } from '../../types/types';
 import { useRef, useState } from 'react';
-import { checkIsPromoCodeCorrect, setIsModalOrderOpen, setModalIsOpen } from '../../store/app-process/app-process.slice';
+import { checkIsPromoCodeCorrect, resetIsPromoApplayed, setIsModalOrderOpen, setModalIsOpen } from '../../store/app-process/app-process.slice';
 import classNames from 'classnames';
 import { DISCOUNT_VALUE } from '../../consts';
 import { sendOrderAction } from '../../store/api-actions';
@@ -208,6 +208,8 @@ export default function BasketPage() {
                             .then(() => {
                               dispatch(setModalIsOpen(true));
                               dispatch(setIsModalOrderOpen(true));
+                              dispatch(resetIsPromoApplayed());
+                              setIsPromoApplyAttempted(false);
                             });
                         }}
                       >

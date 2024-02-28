@@ -119,6 +119,9 @@ export const appSlice = createSlice({
         state.isPromoCodeApplied = false;
       }
     },
+    resetIsPromoApplayed: (state) => {
+      state.isPromoCodeApplied = null;
+    },
     clearBasket: (state) => {
       state.productsInBasketData = [];
       localStorage.removeItem('basketData');
@@ -151,5 +154,6 @@ export const {
   setIsModalRemoveItemOpen,
   setIsModalOrderOpen,
   clearBasket,
-  setRemovingItemId
+  setRemovingItemId,
+  resetIsPromoApplayed
 } = appSlice.actions;
